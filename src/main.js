@@ -7,16 +7,14 @@ Collaborators: Jacob Compton, Eugene Shin, Cole Cota
 let config = 
 {
     type: Phaser.CANVAS,
+    pixelArt: true,
     width: window.innerWidth,
     height: window.innerHeight,
+    //zoom: 1,
     physics: {
         default: 'arcade',
         arcade: {
             debug: false,
-            gravity: {
-                x: 0,
-                y: 0
-            }
         }
     },
     scene: [ Menu, Play],
@@ -25,7 +23,7 @@ let config =
 let game = new Phaser.Game(config);
 
 //define game settings
-game.settings = {
+    game.settings = {
     gameTimer: 10000,
 }
 
