@@ -45,7 +45,7 @@ let colorRED = Phaser.Display.Color.IntegerToColor('0x800000');
 let colorBLUE = Phaser.Display.Color.IntegerToColor('0x000080');
 let saturate;
 let globalColor;
-let sat = 99;
+let sat = .99;
 //Global music variables so we can play music through scenes
 let bgMusic;
 let mainMenuBGMusic;

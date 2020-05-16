@@ -62,41 +62,33 @@ class Play extends Phaser.Scene {
 
         //Input from WASD
         if (Phaser.Input.Keyboard.JustDown(keyA)) {
-            this.p1.setTint(colorRED.color);  // replace color value
             this.globalColor = colorRED;
+            this.globalColor.s = sat;
+            this.p1.setTint(this.globalColor.color);  // replace color value
         }
         else if (Phaser.Input.Keyboard.JustDown(keyD)) {
-            this.p1.setTint(colorBLUE.color);  // replace color value
             this.globalColor = colorBLUE;
+            this.globalColor.s = sat;
+            this.p1.setTint(this.globalColor.color);  // replace color value
         }
 
         if (keyW.isDown) {
-            // if (gray < 255)
-            // {
-            //     gray++;
-            // }
-            // this.globalColor.gray(gray)
-            if (sat <100)
+            if (sat <.99)
             {
-                sat++;
-                this.globalColor.saturate(1);
+                sat+=.01;
+                this.globalColor.s+=.01
             }
             this.p1.setTint(this.globalColor.color);
-            // console.log(gray);
+            console.log(sat);
         }
         else if (keyS.isDown) {
-            // if (gray >0)
-            // {
-            //     gray--;
-            // }
-            // this.globalColor.gray(gray)
-            if (sat >0)
+            if (sat >0.01)
             {
-                sat--;
-                this.globalColor.desaturate(1);
+                sat-=.01;
+                this.globalColor.s-=.01
             }
             this.p1.setTint(this.globalColor.color);
-            // console.log(gray);
+            console.log(sat);
         }
         //check key input for restart
         // if (this.gameOver) {
