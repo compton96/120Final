@@ -2,69 +2,39 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'player');
 
+        this.MAX_X_VEL = 200;
+        this.MAX_Y_VEL = 2000;
+
         scene.physics.add.existing(this);
         scene.add.existing(this); //add object to existing scene, displayList, updateList
-        // this.setScale(1.5);
-        this.setDragX(50);
-        this.setDragY(50);
-        this.setGravityY(0);
+        this.setScale(.5);
+        this.body.setSize(this.width/2);
+        this.body.setDragX(1000);
+        this.body.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
+        this.body.setCollideWorldBounds(true);
+        this.isJumping = false;
     }
 
 
     update() {
         // //Input from WASD
-        // if (Phaser.Input.Keyboard.JustDown(keyA)) {
-        //     if (!this.movingLeft) {
-        //         if(roadPosition != roadLeft){
-        //             roadPosition--
-        //         }
-        //     }
-        //     this.movingRight = false;
-        //     this.movingLeft = true;
-        // }
-        // else if (Phaser.Input.Keyboard.JustDown(keyD)) {
-        //     if (!this.movingRight) {
-        //         if(roadPosition != roadRight){
-        //             roadPosition++;
-        //         }
-        //     }
-        //     this.movingLeft = false;
-        //     this.movingRight = true;
-        // }
+        if (keyA.isDown) {
+            this.setVelocityX(-200);
+        }
+        else if (keyD.isDown) {
+            this.setVelocityX(200);
+        }
 
-        // if (keyW.isDown && this.y >= 50) {
-        //     this.y -= 3;
-        // }
+        if (Phaser.Input.Keyboard.JustDown(keyW) && this.isJumping == false) {
+            this.isJumping = true;
+            this.setVelocityY(-700);
+        }
+        if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.isJumping == false){
+            this.isJumping = true;
+            this.setVelocityY(-700);
+        }
         // else if (keyS.isDown && this.y <= 850) {
-        //     this.y += 3;
+        //     this.setVelocityY(100);
         // }
-        
-        
-        //Input from arrow keys
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            if (!this.movingLeft) {
-                if(roadPosition != roadLeft){
-                    roadPosition--
-                }
-            }
-            this.movingRight = false;
-            this.movingLeft = true;
-        }
-        else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            if (!this.movingRight) {
-                if(roadPosition != roadRight){
-                    roadPosition++;
-                }
-            }
-            this.movingLeft = false;
-            this.movingRight = true;
-        }
-
-        if (keyUP.isDown && this.y >= 50) {
-            this.y -= 3;
-        }
-        else if (keyDOWN.isDown && this.y <= 850) {
-            this.y += 3;
-        }
     }
 }

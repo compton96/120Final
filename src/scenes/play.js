@@ -1,34 +1,60 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+
+        this.MAX_X_VEL = 200;
+        this.MAX_Y_VEL = 2000;
     }
 
     preload() {
         //load images/tile sprite
-        this.load.image('player', './assets/place.jpg');
-        this.load.image('playerTurnLeft', './assets/NOSinGameLeftTurn.png');
-        this.load.image('playerTurnRight', './assets/NOSinGameRightTurn.png');
-        this.load.image('redCar', './assets/NOScarRed.png');
-        this.load.image('blueCar', './assets/NOScarBlue.png');
-        this.load.image('yellowCar', './assets/NOScarYellow.png');
-        this.load.image('enemy', './assets/barrelVan1.png');
-        // this.load.image('enemy2', './assets/starfield.png');
+        this.load.tilemapTiledJSON("testTilemap", "./assets/testTileset.json"); //Tiled JSON file
+        this.load.image("tilemapImage", "./assets/colored_packed.png");
+        this.load.image('player', './assets/NOSinGame.png'); //Player
         this.load.image('background', './assets/tempRoad.png');
         this.load.audio('bgMusic', './assets/ToccataTechno.mp3');
-        this.load.audio('explosion', './assets/explosion.mp3');
-        // this.load.image('spear', './assets/starfield.png');
-        this.load.image('barrel', './assets/barrel1.png');
-        // this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
         this.load.atlas('barrelAtlas', './assets/barrel_roll.png', './assets/barrel_roll_atlas.json');
-        this.load.atlas('vanAtlas', './assets/van.png', './assets/van_atlas.json');
     }
 
     create() {
+        //Add a tilemap
+        const tilemap = this.add.tilemap("testTilemap");
+        //Add a tile set to the tilemap
+        const tileset = tilemap.addTilesetImage("testTileset","tilemapImage");
+        //Create static layers
+        const backgroundLayer = tilemap.createStaticLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
+        const groundLayer = tilemap.createStaticLayer("Ground", tileset, 0, 0);
+        const sceneryLayer = tilemap.createStaticLayer("Scenery", tileset, 0, 0);
 
+        //Set up Tilemap Collision
+        groundLayer.setCollisionByProperty({hasCollision: true});
 
-        this.background = this.add.tileSprite(0, 0, (game.config.width) / 1.75, game.config.height, "background").setOrigin(0, 0);
+        //Define a render debug so we can see the Tilemap's collision bounds
+        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        // groundLayer.renderDebug(debugGraphics, {
+        //     tileColor: null, //Color of non-colliding tiles
+        //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+        // });
+
+        const p1Spawn = tilemap.findObject("Objects", obj => obj.name ==="PlayerSpawn");
+
         //Define keyboard keys
-        this.p1 = new Player(this, 500, 600);
+        this.p1 = new Player(this, p1Spawn.x, p1Spawn.y);
+
+        //Set gravity
+        this.physics.world.gravity.y = 2000;
+        //Set world bounds to tilemap dimensions
+        this.physics.world.bounds.setTo(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
+
+        //Create colliders
+        this.physics.add.collider(this.p1, groundLayer, ()=> {
+            this.p1.isJumping = false;
+        });
+        
+        //Set up camera to follow player
+        this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
+        this.cameras.main.startFollow(this.p1, true, 0.25, 0.25);
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -41,8 +67,8 @@ class Play extends Phaser.Scene {
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
         scoreConfig.fixedWidth = 0;
-        this.clockDisplay = this.add.text(game.config.width / 2, 42, "Time: " + this.game.settings.gameTimer, scoreConfig);
-        this.highestScore = this.add.text(game.config.width / 2, 42 + 64, "Current Highscore: " + localStorage.getItem("highScore"), scoreConfig).setOrigin(0.5);
+        //this.clockDisplay = this.add.text(game.config.width / 2, 42, "Time: " + this.game.settings.gameTimer, scoreConfig);
+        //this.highestScore = this.add.text(game.config.width / 2, 42 + 64, "Current Highscore: " + localStorage.getItem("highScore"), scoreConfig).setOrigin(0.5);
         //game over flag
         this.gameOver = false;
 
@@ -55,40 +81,40 @@ class Play extends Phaser.Scene {
         // }, null, this);
     }
 
-    update() {
+    update(time, delta) {
 
-
+        // this.camControl.update(delta);
         //keep saturation state between worlds
 
         //Input from WASD
-        if (Phaser.Input.Keyboard.JustDown(keyA)) {
+        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.globalColor = colorRED;
             this.globalColor.s = sat;
             this.p1.setTint(this.globalColor.color);  // replace color value
         }
-        else if (Phaser.Input.Keyboard.JustDown(keyD)) {
+        else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.globalColor = colorBLUE;
             this.globalColor.s = sat;
             this.p1.setTint(this.globalColor.color);  // replace color value
         }
 
-        if (keyW.isDown) {
+        if (keyUP.isDown) {
             if (sat <.99)
             {
                 sat+=.01;
                 this.globalColor.s+=.01
             }
             this.p1.setTint(this.globalColor.color);
-            console.log(sat);
+            // console.log(sat);
         }
-        else if (keyS.isDown) {
+        else if (keyDOWN.isDown) {
             if (sat >0.01)
             {
                 sat-=.01;
                 this.globalColor.s-=.01
             }
             this.p1.setTint(this.globalColor.color);
-            console.log(sat);
+            // console.log(sat);
         }
         //check key input for restart
         // if (this.gameOver) {
@@ -115,12 +141,12 @@ class Play extends Phaser.Scene {
             //update sprites here if you want them to pause on game over
             this.p1.update();
 
-            if (parseInt(this.clockDisplay.text) > highScore) {
-                highScore = this.clockDisplay.text;
-                console.log("New Highscore: " + highScore);
-                localStorage.setItem("highScore", highScore);
-                this.highestScore.setText("Current Highscore: " + localStorage.getItem("highScore"));
-            }
+            // if (parseInt(this.clockDisplay.text) > highScore) {
+            //     highScore = this.clockDisplay.text;
+            //     console.log("New Highscore: " + highScore);
+            //     localStorage.setItem("highScore", highScore);
+            //     this.highestScore.setText("Current Highscore: " + localStorage.getItem("highScore"));
+            // }
 
             //Update timer text
             //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
