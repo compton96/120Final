@@ -31,11 +31,7 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            // mainMenuBGMusic.destroy();
-            // mainMenuBGMusic = null;
             this.scene.start("playScene");
-        }
     }
 
 }
