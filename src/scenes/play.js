@@ -14,6 +14,7 @@ class Play extends Phaser.Scene {
         this.load.image('background', './assets/tempRoad.png');
         this.load.audio('bgMusic', './assets/ToccataTechno.mp3');
         this.load.atlas('barrelAtlas', './assets/barrel_roll.png', './assets/barrel_roll_atlas.json');
+        this.load.audio('jump', './assets/discord-notification.mp3');
     }
 
     create() {
@@ -36,7 +37,7 @@ class Play extends Phaser.Scene {
         //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
         //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
         // });
-
+        this.jump = this.sound.add('jump', { volume: 0.3 });
         const p1Spawn = tilemap.findObject("Objects", obj => obj.name ==="PlayerSpawn");
 
         //Define keyboard keys
@@ -115,6 +116,10 @@ class Play extends Phaser.Scene {
             }
             this.p1.setTint(this.globalColor.color);
             // console.log(sat);
+        }
+        if(this.p1.isJumping)
+        {
+            this.jump.play();
         }
         //check key input for restart
         // if (this.gameOver) {
