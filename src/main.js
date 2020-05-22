@@ -43,7 +43,11 @@ if(localStorage.getItem("highScore")){
 let keySPACE, keyLEFT, keyRIGHT, keyDOWN, keyUP, keyW, keyA, keyD, keyS;
 //color vars
 let colorRED = Phaser.Display.Color.IntegerToColor('0x800000');
+let colorDarkRED = Phaser.Display.Color.IntegerToColor('0x300000');
+let colorLightRED = Phaser.Display.Color.IntegerToColor('0xed0000');
 let colorBLUE = Phaser.Display.Color.IntegerToColor('0x000080');
+let colorDarkBLUE = Phaser.Display.Color.IntegerToColor('0x000030');
+let colorLightBLUE = Phaser.Display.Color.IntegerToColor('0x0000e6');
 let saturate;
 let globalColor;
 let sat = .99;
