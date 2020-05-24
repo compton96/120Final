@@ -78,7 +78,7 @@ class Play extends Phaser.Scene {
             this.p1.isJumping = false;
         });
         this.physics.add.collider(this.p1, this.boxGroup);
-        this.physics.add.collider(this.boxGroup, groundLayer);
+        this.physics.add.collider(this.boxGroup, this.groundLayer);
         this.physics.add.collider(this.boxGroup, this.boxGroup);
 
         //box tint
@@ -128,6 +128,7 @@ class Play extends Phaser.Scene {
                 box.body.setImmovable(false);
                 box.body.setFriction(0.5,0.5);
                 box.body.setDrag(100000, 0);
+                box.body.setGravityY(0)
             }, this);
         }
         if (this.boxCurrent == freezeColor)
@@ -137,6 +138,9 @@ class Play extends Phaser.Scene {
                 box.body.setImmovable(true);
                 box.body.setFriction(0.5,0.5);
                 box.body.setDrag(100000, 0);
+                box.body.setVelocity(0,0);
+                box.body.setVelocity(0,0);
+                box.body.setGravityY(-2000)
             }, this);
         }
         if (this.boxCurrent == slideColor)
@@ -146,6 +150,7 @@ class Play extends Phaser.Scene {
                 box.body.setImmovable(false);
                 box.body.setFriction(0,0);
                 box.body.setDrag(0, 0);
+                box.body.setGravityY(0)
             }, this);
         }
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
