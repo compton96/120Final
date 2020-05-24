@@ -40,12 +40,17 @@ if(localStorage.getItem("highScore")){
 }
 
 //Reserve some keyboard variables
-let keySPACE, keyLEFT, keyRIGHT, keyDOWN, keyUP, keyW, keyA, keyD, keyS;
+let keySPACE, keyLEFT, keyRIGHT, keyDOWN, keyUP, keyW, keyA, keyD, keyS, keyONE, keyTWO, keyTHREE;
 //color vars
-let colorRED = Phaser.Display.Color.IntegerToColor('0x800000');
-let colorBLUE = Phaser.Display.Color.IntegerToColor('0x000080');
+let slideColor = Phaser.Display.Color.IntegerToColor('0x800000');
+let freezeColor = Phaser.Display.Color.IntegerToColor('0x000080');
+let bounceColor = Phaser.Display.Color.IntegerToColor('0x008000');
 let saturate;
 let globalColor;
+let boxColor;
+let boxCurrent;
+let boxGroup;
+let boxes;
 let sat = .99;
 //Global music variables so we can play music through scenes
 let bgMusic;

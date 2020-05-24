@@ -9,7 +9,10 @@ class Play extends Phaser.Scene {
     preload() {
         //load images/tile sprite
         this.load.tilemapTiledJSON("testTilemap", "./assets/testTileset.json"); //Tiled JSON file
-        this.load.image("tilemapImage", "./assets/colored_packed.png");
+        this.load.spritesheet("tilemapImage", "./assets/colored_packed.png", {
+            frameWidth: 16,
+            frameHeight: 16
+        });
         this.load.image('player', './assets/NOSinGame.png'); //Player
         this.load.image('background', './assets/tempRoad.png');
         this.load.audio('bgMusic', './assets/ToccataTechno.mp3');
@@ -27,6 +30,10 @@ class Play extends Phaser.Scene {
         const groundLayer = tilemap.createStaticLayer("Ground", tileset, 0, 0);
         const sceneryLayer = tilemap.createStaticLayer("Scenery", tileset, 0, 0);
 
+        this.boxColor = bounceColor;
+        this.boxColor.s = sat;
+        this.boxCurrent = this.boxColor;
+
         //Set up Tilemap Collision
         groundLayer.setCollisionByProperty({hasCollision: true});
 
@@ -43,6 +50,21 @@ class Play extends Phaser.Scene {
         //Define keyboard keys
         this.p1 = new Player(this, p1Spawn.x, p1Spawn.y);
 
+        // generate coin objects from object data
+        this.boxes = tilemap.createFromObjects("Objects", "Box", {
+            key: "tilemapImage",
+            frame: 346
+        }, this);
+
+        this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
+
+        // then add the coins to a group
+        this.boxGroup = this.add.group(this.boxes);
+        this.boxGroup.children.each(function(box) {
+            box.body.setFriction(0.5,0.5);
+            box.body.setDrag(0,0);
+        }, this);
+
         //Set gravity
         this.physics.world.gravity.y = 2000;
         //Set world bounds to tilemap dimensions
@@ -52,6 +74,13 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.p1, groundLayer, ()=> {
             this.p1.isJumping = false;
         });
+        this.physics.add.collider(this.p1, this.boxGroup);
+        this.physics.add.collider(this.boxGroup, groundLayer);
+        this.physics.add.collider(this.boxGroup, this.boxGroup);
+
+        //box tint
+        this.boxGroup.setTint(this.boxColor.color);
+
         
         //Set up camera to follow player
         this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
@@ -66,6 +95,9 @@ class Play extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyONE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        keyTWO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        keyTHREE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
 
         scoreConfig.fixedWidth = 0;
         //this.clockDisplay = this.add.text(game.config.width / 2, 42, "Time: " + this.game.settings.gameTimer, scoreConfig);
@@ -86,6 +118,48 @@ class Play extends Phaser.Scene {
 
         // this.camControl.update(delta);
         //keep saturation state between worlds
+        if (this.boxCurrent == bounceColor)
+        {
+            this.boxGroup.children.each(function(box) {
+                box.body.bounce.y = 1;
+                box.body.setImmovable(false);
+                box.body.setFriction(0.5,0.5);
+                box.body.setDrag(0,0);
+            }, this);
+        }
+        if (this.boxCurrent == freezeColor)
+        {
+            this.boxGroup.children.each(function(box) {
+                box.body.bounce.y = 0;
+                box.body.setImmovable(true);
+                box.body.setFriction(0.5,0.5);
+                box.body.setDrag(0,0);
+            }, this);
+        }
+        if (this.boxCurrent == slideColor)
+        {
+            this.boxGroup.children.each(function(box) {
+                box.body.bounce.y = 0;
+                box.body.setImmovable(false);
+                box.body.setFriction(0,0);
+                box.body.setDrag(0,0);
+            }, this);
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyONE)) {
+            this.boxCurrent = bounceColor;
+            this.boxCurrent.s = sat;
+            this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
+            this.boxCurrent = freezeColor;
+            this.boxCurrent.s = sat;
+            this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyTHREE)) {
+            this.boxCurrent = slideColor;
+            this.boxCurrent.s = sat;
+            this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
+        }
 
         //Input from WASD
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
@@ -106,7 +180,7 @@ class Play extends Phaser.Scene {
                 this.globalColor.s+=.01
             }
             this.p1.setTint(this.globalColor.color);
-            // console.log(sat);
+            console.log(this.p1.tintTopLeft);
         }
         else if (keyDOWN.isDown) {
             if (sat >0.01)
@@ -115,7 +189,7 @@ class Play extends Phaser.Scene {
                 this.globalColor.s-=.01
             }
             this.p1.setTint(this.globalColor.color);
-            // console.log(sat);
+            console.log(this.p1.tintTopLeft);
         }
         if(this.p1.isJumping)
         {
