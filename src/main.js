@@ -45,6 +45,12 @@ let keySPACE, keyLEFT, keyRIGHT, keyDOWN, keyUP, keyW, keyA, keyD, keyS, keyONE,
 let slideColor = Phaser.Display.Color.IntegerToColor('0x800000');
 let freezeColor = Phaser.Display.Color.IntegerToColor('0x000080');
 let bounceColor = Phaser.Display.Color.IntegerToColor('0x008000');
+let colorRED = Phaser.Display.Color.IntegerToColor('0x800000');
+let colorDarkRED = Phaser.Display.Color.IntegerToColor('0x300000');
+let colorLightRED = Phaser.Display.Color.IntegerToColor('0xed0000');
+let colorBLUE = Phaser.Display.Color.IntegerToColor('0x000080');
+let colorDarkBLUE = Phaser.Display.Color.IntegerToColor('0x000030');
+let colorLightBLUE = Phaser.Display.Color.IntegerToColor('0x0000e6');
 let saturate;
 let globalColor;
 let boxColor;

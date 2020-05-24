@@ -24,18 +24,18 @@ class Play extends Phaser.Scene {
         //Add a tilemap
         const tilemap = this.add.tilemap("testTilemap");
         //Add a tile set to the tilemap
-        const tileset = tilemap.addTilesetImage("testTileset","tilemapImage");
+        const tileset = tilemap.addTilesetImage("testTileset", "tilemapImage");
         //Create static layers
-        const backgroundLayer = tilemap.createStaticLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
-        const groundLayer = tilemap.createStaticLayer("Ground", tileset, 0, 0);
-        const sceneryLayer = tilemap.createStaticLayer("Scenery", tileset, 0, 0);
+        this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
+        this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
+        this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
 
         this.boxColor = bounceColor;
         this.boxColor.s = sat;
         this.boxCurrent = this.boxColor;
 
         //Set up Tilemap Collision
-        groundLayer.setCollisionByProperty({hasCollision: true});
+        this.groundLayer.setCollisionByProperty({ hasCollision: true });
 
         //Define a render debug so we can see the Tilemap's collision bounds
         const debugGraphics = this.add.graphics().setAlpha(0.75);
@@ -45,7 +45,7 @@ class Play extends Phaser.Scene {
         //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
         // });
         this.jump = this.sound.add('jump', { volume: 0.3 });
-        const p1Spawn = tilemap.findObject("Objects", obj => obj.name ==="PlayerSpawn");
+        const p1Spawn = tilemap.findObject("Objects", obj => obj.name === "PlayerSpawn");
 
         //Define keyboard keys
         this.p1 = new Player(this, p1Spawn.x, p1Spawn.y);
@@ -71,7 +71,10 @@ class Play extends Phaser.Scene {
         this.physics.world.bounds.setTo(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
         //Create colliders
-        this.physics.add.collider(this.p1, groundLayer, ()=> {
+        // this.physics.add.collider(this.p1, groundLayer, ()=> {
+        //     this.p1.isJumping = false;
+        // });
+        this.physics.add.collider(this.p1, this.groundLayer, () => {
             this.p1.isJumping = false;
         });
         this.physics.add.collider(this.p1, this.boxGroup);
@@ -81,7 +84,7 @@ class Play extends Phaser.Scene {
         //box tint
         this.boxGroup.setTint(this.boxColor.color);
 
-        
+       
         //Set up camera to follow player
         this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
         this.cameras.main.startFollow(this.p1, true, 0.25, 0.25);
@@ -165,34 +168,29 @@ class Play extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.globalColor = colorRED;
             this.globalColor.s = sat;
-            this.p1.setTint(this.globalColor.color);  // replace color value
+            this.updateColors();
         }
         else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.globalColor = colorBLUE;
             this.globalColor.s = sat;
-            this.p1.setTint(this.globalColor.color);  // replace color value
+            this.updateColors();
         }
 
         if (keyUP.isDown) {
-            if (sat <.99)
-            {
-                sat+=.01;
-                this.globalColor.s+=.01
+            if (sat < .99) {
+                sat += .01;
+                this.globalColor.s += .01
             }
-            this.p1.setTint(this.globalColor.color);
-            console.log(this.p1.tintTopLeft);
+            this.updateColors();
         }
         else if (keyDOWN.isDown) {
-            if (sat >0.01)
-            {
-                sat-=.01;
-                this.globalColor.s-=.01
+            if (sat > 0.01) {
+                sat -= .01;
+                this.globalColor.s -= .01
             }
-            this.p1.setTint(this.globalColor.color);
-            console.log(this.p1.tintTopLeft);
+            this.updateColors();
         }
-        if(this.p1.isJumping)
-        {
+        if (this.p1.isJumping) {
             this.jump.play();
         }
         //check key input for restart
@@ -230,5 +228,79 @@ class Play extends Phaser.Scene {
             //Update timer text
             //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
         }
+    }
+
+    updateColors() {
+        // this.p1.setTint(this.globalColor.color); //Uncomment if we want to change player color
+        if (this.globalColor == colorRED) { //Global Color is Red, adjust accordingly
+            this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightRED.s = this.globalColor.s;
+                    tile.tint = colorLightRED.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkRED.s = this.globalColor.s;
+                    tile.tint = colorDarkRED.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+            this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightRED.s = this.globalColor.s;
+                    tile.tint = colorLightRED.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkRED.s = this.globalColor.s;
+                    tile.tint = colorDarkRED.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+            this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightRED.s = this.globalColor.s;
+                    tile.tint = colorLightRED.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkRED.s = this.globalColor.s;
+                    tile.tint = colorDarkRED.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+        } else if (this.globalColor == colorBLUE) { //Global color is Blue, adjust accordingly
+            this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightBLUE.s = this.globalColor.s;
+                    tile.tint = colorLightBLUE.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkBLUE.s = this.globalColor.s;
+                    tile.tint = colorDarkBLUE.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+            this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightBLUE.s = this.globalColor.s;
+                    tile.tint = colorLightBLUE.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkBLUE.s = this.globalColor.s;
+                    tile.tint = colorDarkBLUE.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+            this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightBLUE.s = this.globalColor.s;
+                    tile.tint = colorLightBLUE.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkBLUE.s = this.globalColor.s;
+                    tile.tint = colorDarkBLUE.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+        }
+
     }
 }
