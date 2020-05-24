@@ -62,7 +62,7 @@ class Play extends Phaser.Scene {
         this.boxGroup = this.add.group(this.boxes);
         this.boxGroup.children.each(function(box) {
             box.body.setFriction(0.5,0.5);
-            box.body.setDrag(0,0);
+            box.body.setDrag(100000);
         }, this);
 
         //Set gravity
@@ -124,7 +124,7 @@ class Play extends Phaser.Scene {
                 box.body.bounce.y = 1;
                 box.body.setImmovable(false);
                 box.body.setFriction(0.5,0.5);
-                box.body.setDrag(0,0);
+                box.body.setDrag(100000, 0);
             }, this);
         }
         if (this.boxCurrent == freezeColor)
@@ -133,7 +133,7 @@ class Play extends Phaser.Scene {
                 box.body.bounce.y = 0;
                 box.body.setImmovable(true);
                 box.body.setFriction(0.5,0.5);
-                box.body.setDrag(0,0);
+                box.body.setDrag(100000, 0);
             }, this);
         }
         if (this.boxCurrent == slideColor)
@@ -142,7 +142,7 @@ class Play extends Phaser.Scene {
                 box.body.bounce.y = 0;
                 box.body.setImmovable(false);
                 box.body.setFriction(0,0);
-                box.body.setDrag(0,0);
+                box.body.setDrag(0, 0);
             }, this);
         }
         if (Phaser.Input.Keyboard.JustDown(keyONE)) {
