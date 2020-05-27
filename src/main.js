@@ -15,6 +15,9 @@ let config =
         default: 'arcade',
         arcade: {
             debug: false,
+            fps: 100, //This fixed falling through the floor
+            // tileBias: 64,
+            // overlapBias: 17,
         },
         
         // gravity: {

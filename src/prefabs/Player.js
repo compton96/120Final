@@ -13,6 +13,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
         this.body.setCollideWorldBounds(true);
         this.isJumping = false;
+        this.lastCheckpoint;
     }
 
 
