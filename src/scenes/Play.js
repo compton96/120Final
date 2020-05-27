@@ -29,13 +29,15 @@ class Play extends Phaser.Scene {
         this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
         this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
         this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
-
-        this.boxColor = bounceColor;
-        this.boxColor.s = sat;
-        this.boxCurrent = this.boxColor;
+        this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
+        
+        // this.boxColor = bounceColor;
+        // this.boxColor.s = sat;
+        // this.boxCurrent = this.boxColor;
 
         //Set up Tilemap Collision
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
+        this.deathLayer.setCollisionByProperty({ hasCollision: true });
 
         //Define a render debug so we can see the Tilemap's collision bounds
         const debugGraphics = this.add.graphics().setAlpha(0.75);
@@ -49,12 +51,22 @@ class Play extends Phaser.Scene {
 
         //Define keyboard keys
         this.p1 = new Player(this, p1Spawn.x, p1Spawn.y);
+        this.p1.lastCheckpoint = p1Spawn;
 
         // generate box objects from object data
         // this.boxes = tilemap.createFromObjects("Objects", "Box", {
         //     key: "tilemapImage",
         //     frame: 346
         // }, this);
+
+        this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
+            key: "tilemapImage",
+            frame: 401,
+        }, this);
+
+        this.checkpointGroup = this.add.group(this.checkpoints);
+
+        this.physics.world.enable(this.checkpoints, Phaser.Physics.Arcade.STATIC_BODY);
 
         // this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
 
@@ -63,7 +75,6 @@ class Play extends Phaser.Scene {
         // this.boxGroup.children.each(function (box) {
         //     box.body.setFriction(0.5, 0.5);
         //     box.body.setDrag(100000);
-        //     box.body.overlapBias = 20;
         // }, this);
 
         //Set gravity
@@ -72,15 +83,24 @@ class Play extends Phaser.Scene {
         this.physics.world.bounds.setTo(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
         //Create colliders
-        // this.physics.add.collider(this.p1, groundLayer, ()=> {
-        //     this.p1.isJumping = false;
-        // });
-        this.physics.add.collider(this.p1, this.groundLayer, () => {
+        this.physics.add.collider(this.p1, this.groundLayer, () => { //When player touches the floor layer, allow them to jump again
             this.p1.isJumping = false;
+        });
+
+        this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
+            // console.log("Touched enemy");
+            this.p1.x = this.p1.lastCheckpoint.x;
+            this.p1.y = this.p1.lastCheckpoint.y - this.p1.height / 2;
+        });
+
+        this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
+            this.p1.lastCheckpoint = checkpoint;
         });
         // this.physics.add.collider(this.p1, this.boxGroup);
         // this.physics.add.collider(this.boxGroup, this.groundLayer);
         // this.physics.add.collider(this.boxGroup, this.boxGroup);
+
+
         // this.physics.add.collider(this.boxGroup, this.boxGroup, function (s1, s2) {
         //     var b1 = s1.body;
         //     var b2 = s2.body;
@@ -100,8 +120,8 @@ class Play extends Phaser.Scene {
 
 
         //Set up camera to follow player
-        this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
-        this.cameras.main.startFollow(this.p1, true, 0.25, 0.25);
+        this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels); //Set camera bounds to the tilemap bounds
+        this.cameras.main.startFollow(this.p1, true, 0.25, 0.25); //Make camera follow player
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -234,6 +254,10 @@ class Play extends Phaser.Scene {
             //update sprites here if you want them to pause on game over
             this.p1.update();
 
+            // this.checkpointGroup.children.each((box) => {
+
+            // })
+
             // if (parseInt(this.clockDisplay.text) > highScore) {
             //     highScore = this.clockDisplay.text;
             //     console.log("New Highscore: " + highScore);
@@ -282,6 +306,18 @@ class Play extends Phaser.Scene {
                     tile.tint = this.globalColor.color;
                 }
             });
+            this.deathLayer.forEachTile(tile => { //Loop through death layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightRED.s = this.globalColor.s;
+                    tile.tint = colorLightRED.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkRED.s = this.globalColor.s;
+                    tile.tint = colorDarkRED.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+            this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
         } else if (this.globalColor == colorBLUE) { //Global color is Blue, adjust accordingly
             this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
                 if (tile.properties.Shade == "Light") {
@@ -316,6 +352,18 @@ class Play extends Phaser.Scene {
                     tile.tint = this.globalColor.color;
                 }
             });
+            this.deathLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightBLUE.s = this.globalColor.s;
+                    tile.tint = colorLightBLUE.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkBLUE.s = this.globalColor.s;
+                    tile.tint = colorDarkBLUE.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
+            this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
         }
 
     }
