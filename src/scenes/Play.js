@@ -31,9 +31,9 @@ class Play extends Phaser.Scene {
         this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
         this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
         
-        // this.boxColor = bounceColor;
-        // this.boxColor.s = sat;
-        // this.boxCurrent = this.boxColor;
+        this.boxColor = bounceColor;
+        this.boxColor.s = sat;
+        this.boxCurrent = this.boxColor;
 
         //Set up Tilemap Collision
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
@@ -54,10 +54,10 @@ class Play extends Phaser.Scene {
         this.p1.lastCheckpoint = p1Spawn;
 
         // generate box objects from object data
-        // this.boxes = tilemap.createFromObjects("Objects", "Box", {
-        //     key: "tilemapImage",
-        //     frame: 346
-        // }, this);
+        this.boxes = tilemap.createFromObjects("Objects", "Box", {
+            key: "tilemapImage",
+            frame: 346
+        }, this);
 
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
@@ -68,14 +68,14 @@ class Play extends Phaser.Scene {
 
         this.physics.world.enable(this.checkpoints, Phaser.Physics.Arcade.STATIC_BODY);
 
-        // this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
+        this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
 
         // then add the boxes to a group
-        // this.boxGroup = this.add.group(this.boxes);
-        // this.boxGroup.children.each(function (box) {
-        //     box.body.setFriction(0.5, 0.5);
-        //     box.body.setDrag(100000);
-        // }, this);
+        this.boxGroup = this.add.group(this.boxes);
+        this.boxGroup.children.each(function (box) {
+            box.body.setFriction(0.5, 0.5);
+            box.body.setDrag(100000);
+        }, this);
 
         //Set gravity
         this.physics.world.gravity.y = 2000;
@@ -96,27 +96,27 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
             this.p1.lastCheckpoint = checkpoint;
         });
-        // this.physics.add.collider(this.p1, this.boxGroup);
-        // this.physics.add.collider(this.boxGroup, this.groundLayer);
-        // this.physics.add.collider(this.boxGroup, this.boxGroup);
+        this.physics.add.collider(this.p1, this.boxGroup);
+        this.physics.add.collider(this.boxGroup, this.groundLayer);
+        this.physics.add.collider(this.boxGroup, this.boxGroup);
 
 
-        // this.physics.add.collider(this.boxGroup, this.boxGroup, function (s1, s2) {
-        //     var b1 = s1.body;
-        //     var b2 = s2.body;
+        this.physics.add.collider(this.boxGroup, this.boxGroup, function (s1, s2) {
+            var b1 = s1.body;
+            var b2 = s2.body;
 
-        //     if (b1.y > b2.y) {
-        //         b2.y += (b1.top - b2.bottom);
-        //         b2.stop();
-        //     }
-        //     else {
-        //         b1.y += (b2.top - b1.bottom);
-        //         b1.stop();
-        //     }
-        // });
+            if (b1.y > b2.y) {
+                b2.y += (b1.top - b2.bottom);
+                b2.stop();
+            }
+            else {
+                b1.y += (b2.top - b1.bottom);
+                b1.stop();
+            }
+        });
 
-        //box tint
-        // this.boxGroup.setTint(this.boxColor.color);
+        // box tint
+        this.boxGroup.setTint(this.boxColor.color);
 
 
         //Set up camera to follow player
@@ -155,50 +155,50 @@ class Play extends Phaser.Scene {
 
         // this.camControl.update(delta);
         //keep saturation state between worlds
-        // if (this.boxCurrent == bounceColor) {
-        //     this.boxGroup.children.each(function (box) {
-        //         box.body.bounce.y = 1;
-        //         box.body.setImmovable(false);
-        //         box.body.setFriction(0.5, 0.5);
-        //         box.body.setDrag(100000, 0);
-        //         box.body.setGravityY(0)
-        //     }, this);
-        // }
-        // if (this.boxCurrent == freezeColor) {
-        //     this.boxGroup.children.each(function (box) {
-        //         box.body.bounce.y = 0;
-        //         box.body.setImmovable(true);
-        //         box.body.setFriction(0.5, 0.5);
-        //         box.body.setDrag(100000, 0);
-        //         box.body.setVelocity(0, 0);
-        //         box.body.setVelocity(0, 0);
-        //         box.body.setGravityY(-2000)
-        //     }, this);
-        // }
-        // if (this.boxCurrent == slideColor) {
-        //     this.boxGroup.children.each(function (box) {
-        //         box.body.bounce.y = 0;
-        //         box.body.setImmovable(false);
-        //         box.body.setFriction(0, 0);
-        //         box.body.setDrag(0, 0);
-        //         box.body.setGravityY(0)
-        //     }, this);
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(keyONE)) {
-        //     this.boxCurrent = bounceColor;
-        //     this.boxCurrent.s = sat;
-        //     this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
-        //     this.boxCurrent = freezeColor;
-        //     this.boxCurrent.s = sat;
-        //     this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(keyTHREE)) {
-        //     this.boxCurrent = slideColor;
-        //     this.boxCurrent.s = sat;
-        //     this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
-        // }
+        if (this.boxCurrent == bounceColor) {
+            this.boxGroup.children.each(function (box) {
+                box.body.bounce.y = 1;
+                box.body.setImmovable(false);
+                box.body.setFriction(0.5, 0.5);
+                box.body.setDrag(100000, 0);
+                box.body.setGravityY(0)
+            }, this);
+        }
+        if (this.boxCurrent == freezeColor) {
+            this.boxGroup.children.each(function (box) {
+                box.body.bounce.y = 0;
+                box.body.setImmovable(true);
+                box.body.setFriction(0.5, 0.5);
+                box.body.setDrag(100000, 0);
+                box.body.setVelocity(0, 0);
+                box.body.setVelocity(0, 0);
+                box.body.setGravityY(-2000)
+            }, this);
+        }
+        if (this.boxCurrent == slideColor) {
+            this.boxGroup.children.each(function (box) {
+                box.body.bounce.y = 0;
+                box.body.setImmovable(false);
+                box.body.setFriction(0, 0);
+                box.body.setDrag(0, 0);
+                box.body.setGravityY(0)
+            }, this);
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyONE)) {
+            this.boxCurrent = bounceColor;
+            this.boxCurrent.s = sat;
+            this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
+            this.boxCurrent = freezeColor;
+            this.boxCurrent.s = sat;
+            this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyTHREE)) {
+            this.boxCurrent = slideColor;
+            this.boxCurrent.s = sat;
+            this.boxGroup.setTint(this.boxCurrent.color);  // replace color value
+        }
 
         //Input from WASD
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
