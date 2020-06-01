@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
         });
         this.load.image('player', './assets/NOSinGame.png'); //Player
         this.load.image('background', './assets/tempRoad.png');
+        this.load.image('platform', './assets/platformPlaceholder.png');
         this.load.audio('bgMusic', './assets/ToccataTechno.mp3');
         this.load.atlas('barrelAtlas', './assets/barrel_roll.png', './assets/barrel_roll_atlas.json');
         this.load.audio('jump', './assets/honk.mp3');
@@ -86,6 +87,14 @@ class Play extends Phaser.Scene {
         // }, this);
         this.boxGroup.name = 'box';
         physicsList.add(this.boxGroup);
+        
+        //platforms
+        this.platforms = this.add.physicsGroup();
+        //sprite name
+        this.platforms.create(64, 64, 'platform');
+        this.platforms.setAll('body.allowGravity', false);
+        this.platforms.setAll('body.immovable', true);
+        this.platforms.setAll('body.velocity.x', 100);
 
         //Set gravity
         this.physics.world.gravity.y = 2000;
@@ -102,6 +111,7 @@ class Play extends Phaser.Scene {
             this.p1.x = this.p1.lastCheckpoint.x;
             this.p1.y = this.p1.lastCheckpoint.y - this.p1.height / 2;
         });
+
 
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
             this.p1.lastCheckpoint = checkpoint;
@@ -236,6 +246,9 @@ class Play extends Phaser.Scene {
             //     }, this);
             // })
         }
+        this.physics.add.collider(this.p1, this.platforms);
+
+
         // if (Phaser.Input.Keyboard.JustDown(keyONE)) {
         //     this.globalColor = colorGREEN;
         //     this.globalColor.s = sat;

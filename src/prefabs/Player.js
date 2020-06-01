@@ -22,21 +22,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     update() {
         // console.log(this.body.velocity);
         // //Input from WASD
+        var standing = this.body.blocked.down || this.body.touching.down;
+        this.body.velocity.x = 0;
+
         if (keyA.isDown) {
             this.setVelocityX(-this.xMovement);
         }
         else if (keyD.isDown) {
             this.setVelocityX(this.xMovement);
         }
-
-        if (Phaser.Input.Keyboard.JustDown(keyW) && this.isJumping == false) {
-            this.isJumping = true;
-            this.setVelocityY(-this.yMovement);
+        if (standing && this.keySPACE.isDown && this.time.time > this.jumpTimer)
+        {
+            this.player.body.velocity.y = -500;
+            this.jumpTimer = this.time.time + 750;
         }
-        if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.isJumping == false){
-            this.isJumping = true;
-            this.setVelocityY(-this.yMovement);
-        }
+        // if(Phaser.Input.Keyboard.JustDown(keySPACE) && this.isJumping == false){
+        //     this.isJumping = true;
+        //     this.setVelocityY(-this.yMovement);
+        // }
         // else if (keyS.isDown && this.y <= 850) {
         //     this.setVelocityY(100);
         // }
