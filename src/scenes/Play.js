@@ -99,9 +99,21 @@ class Play extends Phaser.Scene {
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
-            // console.log("Touched enemy");
-            this.p1.x = this.p1.lastCheckpoint.x;
-            this.p1.y = this.p1.lastCheckpoint.y - this.p1.height / 2;
+            this.p1.anims.stop();
+            this.p1.dead = true;
+            this.p1.play('death');
+            this.p1.once('animationcomplete', () => {
+                console.log("Touched enemy");
+                this.p1.x = this.p1.lastCheckpoint.x;
+                this.p1.y = this.p1.lastCheckpoint.y-16;
+                this.p1.dead = false;
+                if (this.p1.facing === 'left') {
+                    this.p1.setFrame('rockDudeRun15.png');
+                }
+                else {
+                    this.p1.setFrame('rockDudeRun1.png');
+                }
+            }, this);
         });
 
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
@@ -184,7 +196,7 @@ class Play extends Phaser.Scene {
                 start: 1,
                 end: 14,
                 zeropad: 1,
-                suffix:'.png'
+                suffix: '.png'
             }),
             repeat: -1,
         });
@@ -196,7 +208,7 @@ class Play extends Phaser.Scene {
                 start: 15,
                 end: 28,
                 zeropad: 1,
-                suffix:'.png'
+                suffix: '.png'
             }),
             repeat: -1,
         });
@@ -208,7 +220,7 @@ class Play extends Phaser.Scene {
                 start: 1,
                 end: 7,
                 zeropad: 1,
-                suffix:'.png'
+                suffix: '.png'
             }),
             repeat: -1,
         });
@@ -220,16 +232,16 @@ class Play extends Phaser.Scene {
                 start: 1,
                 end: 11,
                 zeropad: 1,
-                suffix:'.png'
+                suffix: '.png'
             }),
-            repeat: -1,
+            // repeat: -1,
         });
 
     }
 
     update(time, delta) {
 
-
+        this.p1.updateTime(this.time.now);
         // this.camControl.update(delta);
         //keep saturation state between worlds
         if (this.globalColor == colorGREEN) {
@@ -268,20 +280,19 @@ class Play extends Phaser.Scene {
                 else {
                     group.children.each(function (child) {
                         child.body.bounce.y = 0;
-                        if (sat == 0.99)
-                        {
-                        child.body.setImmovable(true);
-                        // child.body.setDrag(100000, 0);
-                        child.body.veloctiyX = 0;
-                        child.body.velocityY = 0;
-                        // child.body.setGravity(-2000);
+                        if (sat == 0.99) {
+                            child.body.setImmovable(true);
+                            // child.body.setDrag(100000, 0);
+                            child.body.veloctiyX = 0;
+                            child.body.velocityY = 0;
+                            // child.body.setGravity(-2000);
                         }
-                        else{
+                        else {
                             //child.body.setImmovable(false);
                             //child.body.setGravityY(-2000)
                             // child.body.setGravity(2000);
                         }
-                        
+
                     }, this);
                 }
             })
@@ -319,7 +330,7 @@ class Play extends Phaser.Scene {
         else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.globalColor = colorBLUE;
             this.globalColor.s = sat;
-            this.physics.world.timeScale = 1+sat;
+            this.physics.world.timeScale = 1 + sat;
             console.log(this.globalColor.color);
             this.updateColors();
         }
@@ -328,7 +339,7 @@ class Play extends Phaser.Scene {
             if (sat < .99) {
                 sat += .01;
                 this.globalColor.s += .01
-                if(this.globalColor == colorBLUE){
+                if (this.globalColor == colorBLUE) {
                     this.physics.world.timeScale += .01; // physics
                 }
                 // this.camControl.update(delta);
@@ -365,7 +376,7 @@ class Play extends Phaser.Scene {
             if (sat > 0.01) {
                 sat -= .01;
                 this.globalColor.s -= .01
-                if(this.globalColor == colorBLUE){
+                if (this.globalColor == colorBLUE) {
                     this.physics.world.timeScale -= .01; // physics
                 }
                 // if (this.globalColor == colorGREEN) {
@@ -438,7 +449,7 @@ class Play extends Phaser.Scene {
             //Update timer text
             //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
         }
-               // console.log(this.body.velocity);
+        // console.log(this.body.velocity);
 
     }
 
