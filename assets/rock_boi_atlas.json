@@ -1,0 +1,99 @@
+{
+    "frames": [
+        {
+            "filename": "rockdudejump1",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockdudejump2",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 1500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockdudejump3",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 3000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockdudejump4",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 4500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockdudejump5",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 6000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockdudejump6",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 7500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockdudejump7",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 9000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}

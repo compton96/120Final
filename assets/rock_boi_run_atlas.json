@@ -1,0 +1,164 @@
+{
+    "frames": [
+        {
+            "filename": "rockduderun1",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun2",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 1500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun5",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 3000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun6",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 4500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun8",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 6000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun3",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 7500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun4",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 9000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun9",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 10500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun7",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 12000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun13",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 13500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun10",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 15000
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "rockduderun11",
+            "frame": {
+                "w": 1500,
+                "h": 1500,
+                "x": 0,
+                "y": 16500
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}
