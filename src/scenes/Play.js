@@ -18,6 +18,7 @@ class Play extends Phaser.Scene {
         this.load.audio('bgMusic', './assets/ToccataTechno.mp3');
         this.load.atlas('barrelAtlas', './assets/barrel_roll.png', './assets/barrel_roll_atlas.json');
         this.load.audio('jump', './assets/honk.mp3');
+        this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json');
     }
 
     create() {
@@ -53,7 +54,7 @@ class Play extends Phaser.Scene {
         const p1Spawn = tilemap.findObject("Objects", obj => obj.name === "PlayerSpawn");
 
         //spawn player
-        this.p1 = new Player(this, p1Spawn.x, p1Spawn.y);
+        this.p1 = new Player(this, p1Spawn.x, p1Spawn.y, 'animation', 'rockDudeRun1.png');
         this.p1.lastCheckpoint = p1Spawn;
         this.playerGroup = this.add.group();
         this.playerGroup.add(this.p1);
@@ -164,6 +165,66 @@ class Play extends Phaser.Scene {
         //     this.gameOver = true;
         // }, null, this);
         console.log(physicsList);
+
+
+
+
+
+
+
+
+
+
+
+        this.anims.create({
+            key: 'runRight',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames('animation', {
+                prefix: 'rockDudeRun',
+                start: 1,
+                end: 14,
+                zeropad: 1,
+                suffix:'.png'
+            }),
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'runLeft',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames('animation', {
+                prefix: 'rockDudeRun',
+                start: 15,
+                end: 28,
+                zeropad: 1,
+                suffix:'.png'
+            }),
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'jump',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames('animation', {
+                prefix: 'rockDudeJump',
+                start: 1,
+                end: 7,
+                zeropad: 1,
+                suffix:'.png'
+            }),
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'death',
+            frameRate: 10,
+            frames: this.anims.generateFrameNames('animation', {
+                prefix: 'rockDudeDeath',
+                start: 1,
+                end: 11,
+                zeropad: 1,
+                suffix:'.png'
+            }),
+            repeat: -1,
+        });
+
     }
 
     update(time, delta) {
@@ -361,7 +422,7 @@ class Play extends Phaser.Scene {
 
         if (!this.gameOver) {
             //update sprites here if you want them to pause on game over
-            this.p1.update(0);
+            this.p1.update();
 
             // this.checkpointGroup.children.each((box) => {
 
@@ -377,6 +438,8 @@ class Play extends Phaser.Scene {
             //Update timer text
             //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
         }
+               // console.log(this.body.velocity);
+
     }
 
     updateColors() {
