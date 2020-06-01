@@ -44,18 +44,6 @@ class Play extends Phaser.Scene {
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
         this.deathLayer.setCollisionByProperty({ hasCollision: true });
 
-        //sprite name
-        this.platforms =  this.physics.add.sprite(500, 500, 'platform');
-        //platforms
-        this.platformsGroup = this.add.group();
-        this.platformsGroup.add(this.platforms);
-        console.log(this.platformsGroup );
-        this.platformsGroup.children.each(function (child) {
-            console.log(child);
-            child.body.allowGravity = false;
-            child.body.immovable = true;
-        }, this);
-
         //Define a render debug so we can see the Tilemap's collision bounds
         const debugGraphics = this.add.graphics().setAlpha(0.75);
         // groundLayer.renderDebug(debugGraphics, {
@@ -108,9 +96,8 @@ class Play extends Phaser.Scene {
 
         //Create colliders
         this.physics.add.collider(this.p1, this.groundLayer, () => { //When player touches the floor layer, allow them to jump again
-            this.p1.isJumping = false;  
+            this.p1.isJumping = false;
         });
-        this.physics.add.collider(this.p1, this.platforms);
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
             this.p1.anims.stop();
@@ -119,7 +106,7 @@ class Play extends Phaser.Scene {
             this.p1.once('animationcomplete', () => {
                 console.log("Touched enemy");
                 this.p1.x = this.p1.lastCheckpoint.x;
-                this.p1.y = this.p1.lastCheckpoint.y-16;
+                this.p1.y = this.p1.lastCheckpoint.y - 16;
                 this.p1.dead = false;
                 if (this.p1.facing === 'left') {
                     this.p1.setFrame('rockDudeRun15.png');
@@ -155,10 +142,18 @@ class Play extends Phaser.Scene {
         // box tint
         this.boxGroup.setTint(this.boxColor.color);
 
-        this.globalColor = colorGREEN;
-        this.globalColor.s = sat;
-        this.updateColors();
+        //sprite name
+        // this.platforms =  this.physics.add.sprite(500, 500, 'platform');
+        this.platforms = new Platform(this, 500, 500, 'platform', this.globalColor);
+        //platforms
+        this.platformsGroup = this.add.group();
+        this.platformsGroup.add(this.platforms);
+        this.platformsGroup.children.each(function (child) {
+            child.body.allowGravity = false;
+            child.body.immovable = true;
+        }, this);
 
+        this.physics.add.collider(this.p1, this.platforms);
 
         //Set up camera to follow player
         this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels); //Set camera bounds to the tilemap bounds
@@ -243,6 +238,9 @@ class Play extends Phaser.Scene {
             // repeat: -1,
         });
 
+        this.globalColor = colorGREEN;
+        this.globalColor.s = sat;
+        this.updateColors();
     }
 
     update(time, delta) {
@@ -250,24 +248,6 @@ class Play extends Phaser.Scene {
         this.p1.updateTime(this.time.now);
         // this.camControl.update(delta);
         //keep saturation state between worlds
-
-        //platform movement
-        if (this.globalColor == colorGREEN) {
-        this.platformsGroup.children.each(function (child) {
-            // child.body.setVelocityX(100*Math.cos(this.time.now/1000));
-            child.x = (100*Math.cos(this.time.now/1000) + 300);
-        }, this);
-        }
-        else {
-            this.platformsGroup.children.each(function (child) {
-                // child.body.setVelocityX(100*Math.cos(this.time.now/1000));
-                child.x = (100*Math.cos(this.time.now/(2000*(sat))) + 300);
-            }, this);
-
-        }
-
-
-
 
         if (this.globalColor == colorGREEN) {
             physicsList.each((group) => {
@@ -321,42 +301,19 @@ class Play extends Phaser.Scene {
                     }, this);
                 }
             })
-            // physicsList.each((group) => {
-            //     group.children.each(function (child) {
-            //         child.body.bounce.y = 0;
-            //         child.body.setImmovable(true);
-            //         child.body.setFriction(0.5, 0.5);
-            //         child.body.setDrag(100000, 0);
-            //         child.body.setVelocity(0, 0);
-            //         child.body.setVelocity(0, 0);
-            //         child.body.allowGravity = false
-            //     }, this);
-            // })
         }
-        // if (Phaser.Input.Keyboard.JustDown(keyONE)) {
-        //     this.globalColor = colorGREEN;
-        //     this.globalColor.s = sat;
-        //     this.boxGroup.setTint(this.globalColor.color);  // replace color value
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(keyTWO)) {
-        //     this.globalColor = colorBLUE;
-        //     this.globalColor.s = sat;
-        //     this.boxGroup.setTint(this.globalColor.color);  // replace color value
-        // }
 
         //Input from WASD
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.globalColor = colorGREEN;
             this.globalColor.s = sat;
             this.physics.world.timeScale = 1;
-            console.log(this.globalColor.color);
             this.updateColors();
         }
         else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             this.globalColor = colorBLUE;
             this.globalColor.s = sat;
             this.physics.world.timeScale = 1 + sat;
-            console.log(this.globalColor.color);
             this.updateColors();
         }
 
@@ -367,33 +324,6 @@ class Play extends Phaser.Scene {
                 if (this.globalColor == colorBLUE) {
                     this.physics.world.timeScale += .01; // physics
                 }
-                // this.camControl.update(delta);
-                //keep saturation state between worlds
-                // if (this.globalColor == colorGREEN) {
-                //     physicsList.each((group) => {
-                //         group.children.each(function (child) {
-                //             child.body.bounce.y += .01;
-                //         }, this);
-                //     })
-                // }
-                // if (this.globalColor == colorBLUE) {
-                //     if (sat == .99) {
-                //         physicsList.each((group) => {
-                //             group.children.each(function (child) {
-                //                 child.body.setImmovable(true);
-                //                 child.body.setVelocity(0, 0);
-                //             }, this);
-                //         })
-                //     }
-                //     else if (sat < .99) {
-                //         physicsList.each((group) => {
-                //             group.children.each(function (child) {
-                //                 child.body.setImmovable(false);
-                //                 child.body.setGravityY(-2000)
-                //             }, this);
-                //         })
-                //     }
-                // }
             }
             this.updateColors();
         }
@@ -404,31 +334,6 @@ class Play extends Phaser.Scene {
                 if (this.globalColor == colorBLUE) {
                     this.physics.world.timeScale -= .01; // physics
                 }
-                // if (this.globalColor == colorGREEN) {
-                //     physicsList.each((group) => {
-                //         group.children.each(function (child) {
-                //             child.body.bounce.y += .01;
-                //         }, this);
-                //     })
-                // }
-                // else if (this.globalColor == colorBLUE) {
-                //     if (sat == .99) {
-                //         physicsList.each((group) => {
-                //             group.children.each(function (child) {
-                //                 child.body.setImmovable(true);
-                //                 child.body.setVelocity(0, 0);
-                //             }, this);
-                //         })
-                //     }
-                //     else if (sat < .99) {
-                //         physicsList.each((group) => {
-                //             group.children.each(function (child) {
-                //                 child.body.setImmovable(false);
-                //                 child.body.setGravityY(-2000)
-                //             }, this);
-                //         })
-                //     }
-                // }
                 this.updateColors();
             }
         }
@@ -459,10 +364,10 @@ class Play extends Phaser.Scene {
         if (!this.gameOver) {
             //update sprites here if you want them to pause on game over
             this.p1.update();
-
-            // this.checkpointGroup.children.each((box) => {
-
-            // })
+            this.platformsGroup.children.each(function (child) {
+                child.color = this.globalColor;
+                child.update();
+            }, this);
 
             // if (parseInt(this.clockDisplay.text) > highScore) {
             //     highScore = this.clockDisplay.text;
@@ -474,8 +379,6 @@ class Play extends Phaser.Scene {
             //Update timer text
             //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
         }
-        // console.log(this.body.velocity);
-
     }
 
     updateColors() {
@@ -492,17 +395,17 @@ class Play extends Phaser.Scene {
                     tile.tint = this.globalColor.color;
                 }
             });
-            // this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
-            //     if (tile.properties.Shade == "Light") {
-            //         colorLightGREEN.s = this.globalColor.s;
-            //         tile.tint = colorLightGREEN.color;
-            //     } else if (tile.properties.Shade == "Dark") {
-            //         colorDarkGREEN.s = this.globalColor.s;
-            //         tile.tint = colorDarkGREEN.color;
-            //     } else {
-            //         tile.tint = this.globalColor.color;
-            //     }
-            // });
+            this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightGREEN.s = this.globalColor.s;
+                    tile.tint = colorLightGREEN.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkGREEN.s = this.globalColor.s;
+                    tile.tint = colorDarkGREEN.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
             this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
                 if (tile.properties.Shade == "Light") {
                     colorLightGREEN.s = this.globalColor.s;
@@ -527,6 +430,7 @@ class Play extends Phaser.Scene {
             });
             this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints3
             this.boxGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+            this.platformsGroup.setTint(this.globalColor.color);
         } else if (this.globalColor == colorBLUE) { //Global color is Blue, adjust accordingly
             this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
                 if (tile.properties.Shade == "Light") {
@@ -539,17 +443,17 @@ class Play extends Phaser.Scene {
                     tile.tint = this.globalColor.color;
                 }
             });
-            // this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
-            //     if (tile.properties.Shade == "Light") {
-            //         colorLightBLUE.s = this.globalColor.s;
-            //         tile.tint = colorLightBLUE.color;
-            //     } else if (tile.properties.Shade == "Dark") {
-            //         colorDarkBLUE.s = this.globalColor.s;
-            //         tile.tint = colorDarkBLUE.color;
-            //     } else {
-            //         tile.tint = this.globalColor.color;
-            //     }
-            // });
+            this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
+                if (tile.properties.Shade == "Light") {
+                    colorLightBLUE.s = this.globalColor.s;
+                    tile.tint = colorLightBLUE.color;
+                } else if (tile.properties.Shade == "Dark") {
+                    colorDarkBLUE.s = this.globalColor.s;
+                    tile.tint = colorDarkBLUE.color;
+                } else {
+                    tile.tint = this.globalColor.color;
+                }
+            });
             this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
                 if (tile.properties.Shade == "Light") {
                     colorLightBLUE.s = this.globalColor.s;
@@ -574,7 +478,7 @@ class Play extends Phaser.Scene {
             });
             this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
             this.boxGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+            this.platformsGroup.setTint(this.globalColor.color);
         }
-
     }
 }
