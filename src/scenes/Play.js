@@ -19,6 +19,7 @@ class Play extends Phaser.Scene {
         this.load.atlas('barrelAtlas', './assets/barrel_roll.png', './assets/barrel_roll_atlas.json');
         this.load.audio('jump', './assets/honk.mp3');
         this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json');
+        this.load.image('platform', './assets/platformPlaceholder.png');
     }
 
     create() {
@@ -42,6 +43,18 @@ class Play extends Phaser.Scene {
         //Set up Tilemap Collision
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
         this.deathLayer.setCollisionByProperty({ hasCollision: true });
+
+        //sprite name
+        this.platforms =  this.physics.add.sprite(500, 500, 'platform');
+        //platforms
+        this.platformsGroup = this.add.group();
+        this.platformsGroup.add(this.platforms);
+        console.log(this.platformsGroup );
+        this.platformsGroup.children.each(function (child) {
+            console.log(child);
+            child.body.allowGravity = false;
+            child.body.immovable = true;
+        }, this);
 
         //Define a render debug so we can see the Tilemap's collision bounds
         const debugGraphics = this.add.graphics().setAlpha(0.75);
@@ -95,8 +108,9 @@ class Play extends Phaser.Scene {
 
         //Create colliders
         this.physics.add.collider(this.p1, this.groundLayer, () => { //When player touches the floor layer, allow them to jump again
-            this.p1.isJumping = false;
+            this.p1.isJumping = false;  
         });
+        this.physics.add.collider(this.p1, this.platforms);
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
             this.p1.anims.stop();
@@ -176,15 +190,7 @@ class Play extends Phaser.Scene {
         //     this.add.text(game.config.width / 2, game.config.height / 2 + 64, "Space to Restart or ← for Menu", scoreConfig).setOrigin(0.5);
         //     this.gameOver = true;
         // }, null, this);
-        console.log(physicsList);
-
-
-
-
-
-
-
-
+        //console.log(physicsList);
 
 
 
@@ -244,6 +250,25 @@ class Play extends Phaser.Scene {
         this.p1.updateTime(this.time.now);
         // this.camControl.update(delta);
         //keep saturation state between worlds
+
+        //platform movement
+        if (this.globalColor == colorGREEN) {
+        this.platformsGroup.children.each(function (child) {
+            // child.body.setVelocityX(100*Math.cos(this.time.now/1000));
+            child.x = (100*Math.cos(this.time.now/1000) + 300);
+        }, this);
+        }
+        else {
+            this.platformsGroup.children.each(function (child) {
+                // child.body.setVelocityX(100*Math.cos(this.time.now/1000));
+                child.x = (100*Math.cos(this.time.now/(2000*(sat))) + 300);
+            }, this);
+
+        }
+
+
+
+
         if (this.globalColor == colorGREEN) {
             physicsList.each((group) => {
                 if (group.name == 'player') {
