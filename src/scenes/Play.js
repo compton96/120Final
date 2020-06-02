@@ -8,10 +8,15 @@ class Play extends Phaser.Scene {
 
     preload() {
         //load images/tile sprite
-        this.load.tilemapTiledJSON("testTilemap", "./assets/testTileset.json"); //Tiled JSON file
-        this.load.spritesheet("tilemapImage", "./assets/colored_packed.png", {
-            frameWidth: 16,
-            frameHeight: 16
+        // this.load.tilemapTiledJSON("testTilemap", "./assets/testTileset.json"); //Tiled JSON file
+        this.load.tilemapTiledJSON("tilemapJson", "./assets/finalLevelTilemap.json"); //Tiled JSON file
+        // this.load.spritesheet("tilemapImage", "./assets/colored_packed.png", {
+        //     frameWidth: 16,
+        //     frameHeight: 16
+        // });
+        this.load.spritesheet("tilemapImage", "./assets/ruinTileSheet.png", {
+            frameWidth: 100,
+            frameHeight: 100,
         });
         this.load.image('player', './assets/NOSinGame.png'); //Player
         this.load.image('background', './assets/tempRoad.png');
@@ -27,18 +32,18 @@ class Play extends Phaser.Scene {
         physicsList = new Phaser.Structs.List(Phaser.GameObjects.Group);
 
         //Add a tilemap
-        const tilemap = this.add.tilemap("testTilemap");
+        const tilemap = this.add.tilemap("tilemapJson");
         //Add a tile set to the tilemap
-        const tileset = tilemap.addTilesetImage("testTileset", "tilemapImage");
+        const tileset = tilemap.addTilesetImage("finalTileset", "tilemapImage");
         //Create static layers
         this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
         this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
         this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
         this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
 
-        this.boxColor = bounceColor;
-        this.boxColor.s = sat;
-        this.boxCurrent = this.boxColor;
+        // this.boxColor = bounceColor;
+        // this.boxColor.s = sat;
+        // this.boxCurrent = this.boxColor;
 
         //Set up Tilemap Collision
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
@@ -65,10 +70,10 @@ class Play extends Phaser.Scene {
         physicsList.add(this.playerGroup);
 
         // generate box objects from object data
-        this.boxes = tilemap.createFromObjects("Objects", "Box", {
-            key: "tilemapImage",
-            frame: 346
-        }, this);
+        // this.boxes = tilemap.createFromObjects("Objects", "Box", {
+        //     key: "tilemapImage",
+        //     frame: 346
+        // }, this);
 
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
@@ -78,16 +83,16 @@ class Play extends Phaser.Scene {
         this.checkpointGroup = this.add.group(this.checkpoints);
         this.physics.world.enable(this.checkpoints, Phaser.Physics.Arcade.STATIC_BODY);
 
-        this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
+        // this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
 
         // then add the boxes to a group
-        this.boxGroup = this.add.group(this.boxes);
+        // this.boxGroup = this.add.group(this.boxes);
         // this.boxGroup.children.each(function (box) {
         //     box.body.setFriction(0.5, 0.5);
         //     box.body.setDrag(100000);
         // }, this);
-        this.boxGroup.name = 'box';
-        physicsList.add(this.boxGroup);
+        // this.boxGroup.name = 'box';
+        // physicsList.add(this.boxGroup);
 
         //Set gravity
         this.physics.world.gravity.y = 2000;
@@ -121,27 +126,27 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
             this.p1.lastCheckpoint = checkpoint;
         });
-        this.physics.add.collider(this.p1, this.boxGroup);
-        this.physics.add.collider(this.boxGroup, this.groundLayer);
-        this.physics.add.collider(this.boxGroup, this.boxGroup);
+        // this.physics.add.collider(this.p1, this.boxGroup);
+        // this.physics.add.collider(this.boxGroup, this.groundLayer);
+        // this.physics.add.collider(this.boxGroup, this.boxGroup);
 
 
-        this.physics.add.collider(this.boxGroup, this.boxGroup, function (s1, s2) {
-            var b1 = s1.body;
-            var b2 = s2.body;
+        // this.physics.add.collider(this.boxGroup, this.boxGroup, function (s1, s2) {
+        //     var b1 = s1.body;
+        //     var b2 = s2.body;
 
-            if (b1.y > b2.y) {
-                b2.y += (b1.top - b2.bottom);
-                b2.stop();
-            }
-            else {
-                b1.y += (b2.top - b1.bottom);
-                b1.stop();
-            }
-        });
+        //     if (b1.y > b2.y) {
+        //         b2.y += (b1.top - b2.bottom);
+        //         b2.stop();
+        //     }
+        //     else {
+        //         b1.y += (b2.top - b1.bottom);
+        //         b1.stop();
+        //     }
+        // });
 
         // box tint
-        this.boxGroup.setTint(this.boxColor.color);
+        // this.boxGroup.setTint(this.boxColor.color);
 
         //sprite name
         // this.platforms =  this.physics.add.sprite(500, 500, 'platform');
@@ -159,6 +164,7 @@ class Play extends Phaser.Scene {
         //Set up camera to follow player
         this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels); //Set camera bounds to the tilemap bounds
         this.cameras.main.startFollow(this.p1, true, 0.25, 0.25); //Make camera follow player
+        this.cameras.main.setZoom(0.5);
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -430,7 +436,7 @@ class Play extends Phaser.Scene {
                 }
             });
             this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints3
-            this.boxGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+            // this.boxGroup.setTint(this.globalColor.color);
             this.platformsGroup.setTint(this.globalColor.color);
         } else if (this.globalColor == colorBLUE) { //Global color is Blue, adjust accordingly
             this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
@@ -478,7 +484,7 @@ class Play extends Phaser.Scene {
                 }
             });
             this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
-            this.boxGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+            // this.boxGroup.setTint(this.globalColor.color);
             this.platformsGroup.setTint(this.globalColor.color);
         }
     }
