@@ -7,7 +7,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
 
         scene.physics.add.existing(this);
         scene.add.existing(this); //add object to existing scene, displayList, updateList
-        this.movementSpeed = 1;
+        this.movementSpeed = 200;
         this.spawnPoint = x;
         this.goingLeft = false;
         this.goingRight = true;
@@ -15,27 +15,31 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        if(this.x >= this.spawnPoint + 200){
+        if(this.x >= this.spawnPoint + 100){
             this.goingRight = false;
             this.goingLeft = true;
         }
-        if(this.x <= this.spawnPoint - 200){
+        if(this.x <= this.spawnPoint - 100){
             this.goingLeft = false;
             this.goingRight = true;
         }
-        if(this.goingRight && this.x < this.spawnPoint + 200){
+        if(this.goingRight && this.x < this.spawnPoint + 100){
             // console.log("Going right");
             if(this.color == colorGREEN){
-                this.x += this.movementSpeed;
+                // this.x += this.movementSpeed;
+                this.setVelocityX(this.movementSpeed);
             } else{
-                this.x += this.movementSpeed * (1 - this.color.s);
+                // this.x += this.movementSpeed * (1 - this.color.s);
+                this.setVelocityX(this.movementSpeed * (1 - this.color.s));
             }
-        } else if(this.goingLeft && this.x > this.spawnPoint - 200){
+        } else if(this.goingLeft && this.x > this.spawnPoint - 100){
             // console.log("Going left");
             if(this.color == colorGREEN){
-                this.x -= this.movementSpeed;
+                // this.x -= this.movementSpeed;
+                this.setVelocityX(-this.movementSpeed);
             } else{
-                this.x -= this.movementSpeed * (1 - this.color.s);
+                // this.x -= this.movementSpeed * (1 - this.color.s);
+                this.setVelocityX(-this.movementSpeed * (1 - this.color.s));
             }
         }
     }

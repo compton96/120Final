@@ -103,7 +103,8 @@ class Play extends Phaser.Scene {
             this.p1.anims.stop();
             this.p1.dead = true;
             this.p1.play('death');
-            this.p1.once('animationcomplete', () => {
+            // this.p1.once('animationcomplete', () => {
+                this.p1.once('death', () => {
                 console.log("Touched enemy");
                 this.p1.x = this.p1.lastCheckpoint.x;
                 this.p1.y = this.p1.lastCheckpoint.y - 16;
