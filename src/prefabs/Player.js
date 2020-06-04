@@ -2,7 +2,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture) {
         super(scene, x, y, texture);
 
-        this.MAX_X_VEL = 200;
+        this.MAX_X_VEL = 10000;
         this.MAX_Y_VEL = 2000;
 
         scene.physics.add.existing(this);
@@ -14,8 +14,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
         this.isJumping = false;
         this.lastCheckpoint;
-        this.xMovement = 200;
-        this.yMovement = 700;
+        this.xMovement = 5000;
+        this.yMovement = 5000;
         this.facing = 'left';
         this.jumpTimer = 0;
         this.time = 0;
@@ -49,14 +49,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             else {
                 if (this.facing !== 'idle') {
                     this.anims.stop();
-
                     if (this.facing === 'left') {
                         this.setFrame('rockDudeRun15.png');
                     }
                     else {
                         this.setFrame('rockDudeRun1.png');
                     }
-
                     this.facing = 'idle';
                 }
             }
@@ -66,7 +64,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('jump');
                 this.isJumping = true;
             }
-            if (standing && this.isJumping) {
+            if(this.jumpTimer < this.time && this.isJumping){
                 this.isJumping = false;
                 if (this.facing === 'left') {
                     this.setFrame('rockDudeRun15.png');
@@ -75,6 +73,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     this.setFrame('rockDudeRun1.png');
                 }
             }
+            // if (standing && this.isJumping) {
+            //     this.isJumping = false;
+            //     if (this.facing === 'left') {
+            //         this.setFrame('rockDudeRun15.png');
+            //     }
+            //     else {
+            //         this.setFrame('rockDudeRun1.png');
+            //     }
+            //     // this.anims.stop();
+            // }
         }
     }
     updateTime(num) {

@@ -2,7 +2,7 @@ class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
 
-        this.MAX_X_VEL = 200;
+        this.MAX_X_VEL = 2000;
         this.MAX_Y_VEL = 2000;
     }
 
@@ -18,18 +18,22 @@ class Play extends Phaser.Scene {
             frameWidth: 100,
             frameHeight: 100,
         });
-        this.load.image('player', './assets/NOSinGame.png'); //Player
-        this.load.image('background', './assets/tempRoad.png');
-        this.load.audio('bgMusic', './assets/ToccataTechno.mp3');
-        this.load.atlas('barrelAtlas', './assets/barrel_roll.png', './assets/barrel_roll_atlas.json');
+        this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
         this.load.audio('jump', './assets/honk.mp3');
-        this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json');
+        this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json'); //Player
         this.load.image('platform', './assets/platformPlaceholder.png');
     }
 
     create() {
 
         physicsList = new Phaser.Structs.List(Phaser.GameObjects.Group);
+
+        if (!bgMusic) {
+            bgMusic = this.sound.add('bgMusic', { volume: 0.2 });
+            bgMusic.play({
+                loop: true,
+            });
+        }
 
         //Add a tilemap
         const tilemap = this.add.tilemap("tilemapJson");
@@ -77,7 +81,7 @@ class Play extends Phaser.Scene {
 
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
-            frame: 401,
+            frame: 3,
         }, this);
 
         this.checkpointGroup = this.add.group(this.checkpoints);
@@ -101,7 +105,8 @@ class Play extends Phaser.Scene {
 
         //Create colliders
         this.physics.add.collider(this.p1, this.groundLayer, () => { //When player touches the floor layer, allow them to jump again
-            this.p1.isJumping = false;
+            // this.p1.isJumping = false;
+            // this.jump.stop();
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
@@ -198,7 +203,7 @@ class Play extends Phaser.Scene {
 
         this.anims.create({
             key: 'runRight',
-            frameRate: 10,
+            frameRate: 15,
             frames: this.anims.generateFrameNames('animation', {
                 prefix: 'rockDudeRun',
                 start: 1,
@@ -210,7 +215,7 @@ class Play extends Phaser.Scene {
         });
         this.anims.create({
             key: 'runLeft',
-            frameRate: 10,
+            frameRate: 15,
             frames: this.anims.generateFrameNames('animation', {
                 prefix: 'rockDudeRun',
                 start: 15,
@@ -222,7 +227,7 @@ class Play extends Phaser.Scene {
         });
         this.anims.create({
             key: 'jump',
-            frameRate: 10,
+            frameRate: 15,
             frames: this.anims.generateFrameNames('animation', {
                 prefix: 'rockDudeJump',
                 start: 1,
@@ -230,7 +235,7 @@ class Play extends Phaser.Scene {
                 zeropad: 1,
                 suffix: '.png'
             }),
-            repeat: -1,
+            // repeat: -1,
         });
         this.anims.create({
             key: 'death',
@@ -345,7 +350,7 @@ class Play extends Phaser.Scene {
             }
         }
         if (this.p1.isJumping) {
-            this.jump.play();
+            // this.jump.play();
         }
         //check key input for restart
         // if (this.gameOver) {
