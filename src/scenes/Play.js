@@ -266,8 +266,8 @@ class Play extends Phaser.Scene {
                 if (group.name == 'player') {
                     group.children.each(function (child) {
                         child.body.bounce.y = sat;
-                        child.xMovement = 200;
-                        child.yMovement = 700;
+                        // child.xMovement = 2000;
+                        // child.yMovement = 7000;
                         this.physics.world.updateMotion(this.p1.body, .00005);
                         //child.body.setDrag(100000, 0);
                     }, this);

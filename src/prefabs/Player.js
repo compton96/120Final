@@ -14,8 +14,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
         this.isJumping = false;
         this.lastCheckpoint;
-        this.xMovement = 5000;
-        this.yMovement = 5000;
+        this.xMovement = 2000;
+        this.yMovement = 7000;
         this.facing = 'left';
         this.jumpTimer = 0;
         this.time = 0;
