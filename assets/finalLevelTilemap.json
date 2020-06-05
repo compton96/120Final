@@ -4,7 +4,7 @@
      "export":
         {
          "format":"json",
-         "target":"TiledFiles"
+         "target":"finalLevelTilemap.json"
         }
     },
  "height":50,
@@ -462,6 +462,29 @@
                 }, 
                 {
                  "id":9,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":27.2028385570668,
+                             "id":1,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":99.3494973388528,
+                             "x":-0.295683027794205,
+                             "y":-0.295683027794205
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    },
                  "properties":[
                         {
                          "name":"hasCollision",
@@ -506,7 +529,66 @@
                         }]
                 }, 
                 {
+                 "id":14,
+                 "properties":[
+                        {
+                         "name":"hasCollision",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
                  "id":15,
+                 "properties":[
+                        {
+                         "name":"hasCollision",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":16,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":63.8675340035482,
+                             "id":1,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":100.236546422235,
+                             "x":0,
+                             "y":0.295683027794205
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    },
+                 "properties":[
+                        {
+                         "name":"hasCollision",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":17,
+                 "properties":[
+                        {
+                         "name":"hasCollision",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":18,
                  "properties":[
                         {
                          "name":"hasCollision",

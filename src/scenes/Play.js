@@ -18,6 +18,10 @@ class Play extends Phaser.Scene {
             frameWidth: 100,
             frameHeight: 100,
         });
+        this.load.spritesheet("backgroundImage", "./assets/backgroundWorking.png", {
+            frameWidth: 100,
+            frameHeight: 100,
+        });
         this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
         this.load.audio('jump', './assets/honk.mp3');
         this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json'); //Player
@@ -39,8 +43,10 @@ class Play extends Phaser.Scene {
         const tilemap = this.add.tilemap("tilemapJson");
         //Add a tile set to the tilemap
         const tileset = tilemap.addTilesetImage("finalTileset", "tilemapImage");
+        const backgroundTileset = tilemap.addTilesetImage("background", "backgroundImage");
         //Create static layers
-        this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
+        // this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
+        this.backgroundLayer = tilemap.createDynamicLayer("Background", backgroundTileset, 0, 0);//.setScrollFactor(0.25);
         this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
         this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
         this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
@@ -79,6 +85,7 @@ class Play extends Phaser.Scene {
         //     frame: 346
         // }, this);
 
+        //Setting up checkpoints
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
             frame: 19,
@@ -86,6 +93,15 @@ class Play extends Phaser.Scene {
 
         this.checkpointGroup = this.add.group(this.checkpoints);
         this.physics.world.enable(this.checkpoints, Phaser.Physics.Arcade.STATIC_BODY);
+
+        //Setting up jump pads
+        this.bouncepads = tilemap.createFromObjects("Objects", "Bouncepad", {
+            key: "tilemapImage",
+            frame: 15,
+        }, this);
+
+        this.bouncepadGroup = this.add.group(this.bouncepads);
+        this.physics.world.enable(this.bouncepads, Phaser.Physics.Arcade.STATIC_BODY);
 
         // this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
 
@@ -110,22 +126,25 @@ class Play extends Phaser.Scene {
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
-            this.p1.anims.stop();
-            this.p1.dead = true;
-            this.p1.play('death');
-            // this.p1.once('animationcomplete', () => {
-                this.p1.once('death', () => {
-                console.log("Touched enemy");
-                this.p1.x = this.p1.lastCheckpoint.x;
-                this.p1.y = this.p1.lastCheckpoint.y - 16;
-                this.p1.dead = false;
-                if (this.p1.facing === 'left') {
-                    this.p1.setFrame('rockDudeRun15.png');
-                }
-                else {
-                    this.p1.setFrame('rockDudeRun1.png');
-                }
-            }, this);
+            // console.log("Touching death");
+
+            if (!this.p1.dead) {
+                this.p1.dead = true;
+                this.p1.anims.stop();
+                this.p1.play('death');
+                this.p1.once('animationcomplete', () => {
+                    // this.p1.once('death', () => {
+                    this.p1.x = this.p1.lastCheckpoint.x;
+                    this.p1.y = this.p1.lastCheckpoint.y - 100;
+                    this.p1.dead = false;
+                    if (this.p1.facing === 'left') {
+                        this.p1.setFrame('rockDudeRun15.png');
+                    }
+                    else {
+                        this.p1.setFrame('rockDudeRun1.png');
+                    }
+                }, this);
+            }
         });
 
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
@@ -155,7 +174,7 @@ class Play extends Phaser.Scene {
 
         //Setting up platforms, had to use filerObjects since we're making them a class
         this.platformSpawns = tilemap.filterObjects("Objects", (object) => {
-            if(object.name == "Platform"){
+            if (object.name == "Platform") {
                 return true;
             } else {
                 return false;
@@ -163,11 +182,11 @@ class Play extends Phaser.Scene {
         });
 
         this.platformsGroup = this.add.group();
-        for(var itr = 0; itr < this.platformSpawns.length; itr++){
+        for (var itr = 0; itr < this.platformSpawns.length; itr++) {
             this.platform = new Platform(this, this.platformSpawns[itr].x, this.platformSpawns[itr].y);
             this.platform.setTexture("tilemapImage", 9);
             this.platformsGroup.add(this.platform);
-        }        
+        }
         // this.physics.world.enable(this.platformsGroup, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.physics.add.collider(this.p1, this.platformsGroup);
 
@@ -445,7 +464,9 @@ class Play extends Phaser.Scene {
                     tile.tint = this.globalColor.color;
                 }
             });
-            this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints3
+            this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+            this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
+            this.playerGroup.setTint(this.globalColor.color);
             // this.boxGroup.setTint(this.globalColor.color);
             this.platformsGroup.setTint(this.globalColor.color);
         } else if (this.globalColor == colorBLUE) { //Global color is Blue, adjust accordingly
@@ -494,6 +515,8 @@ class Play extends Phaser.Scene {
                 }
             });
             this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+            this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
+            this.playerGroup.setTint(this.globalColor.color);
             // this.boxGroup.setTint(this.globalColor.color);
             this.platformsGroup.setTint(this.globalColor.color);
         }

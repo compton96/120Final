@@ -49,6 +49,9 @@
    <properties>
     <property name="hasCollision" type="bool" value="true"/>
    </properties>
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="-0.295683" y="-0.295683" width="99.3495" height="27.2028"/>
+   </objectgroup>
   </tile>
   <tile id="10">
    <properties>
@@ -70,7 +73,30 @@
     <property name="hasCollision" type="bool" value="true"/>
    </properties>
   </tile>
+  <tile id="14">
+   <properties>
+    <property name="hasCollision" type="bool" value="true"/>
+   </properties>
+  </tile>
   <tile id="15">
+   <properties>
+    <property name="hasCollision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="hasCollision" type="bool" value="true"/>
+   </properties>
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="0" y="0.295683" width="100.237" height="63.8675"/>
+   </objectgroup>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="hasCollision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="18">
    <properties>
     <property name="hasCollision" type="bool" value="true"/>
    </properties>
