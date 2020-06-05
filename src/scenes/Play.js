@@ -81,7 +81,7 @@ class Play extends Phaser.Scene {
 
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
-            frame: 3,
+            frame: 19,
         }, this);
 
         this.checkpointGroup = this.add.group(this.checkpoints);
@@ -99,7 +99,7 @@ class Play extends Phaser.Scene {
         // physicsList.add(this.boxGroup);
 
         //Set gravity
-        this.physics.world.gravity.y = 2000;
+        this.physics.world.gravity.y = 3000;
         //Set world bounds to tilemap dimensions
         this.physics.world.bounds.setTo(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
@@ -153,18 +153,23 @@ class Play extends Phaser.Scene {
         // box tint
         // this.boxGroup.setTint(this.boxColor.color);
 
-        //sprite name
-        // this.platforms =  this.physics.add.sprite(500, 500, 'platform');
-        this.platforms = new Platform(this, 500, 500, 'platform', this.globalColor);
-        //platforms
-        this.platformsGroup = this.add.group();
-        this.platformsGroup.add(this.platforms);
-        this.platformsGroup.children.each(function (child) {
-            child.body.allowGravity = false;
-            child.body.immovable = true;
-        }, this);
+        //Setting up platforms, had to use filerObjects since we're making them a class
+        this.platformSpawns = tilemap.filterObjects("Objects", (object) => {
+            if(object.name == "Platform"){
+                return true;
+            } else {
+                return false;
+            }
+        });
 
-        this.physics.add.collider(this.p1, this.platforms);
+        this.platformsGroup = this.add.group();
+        for(var itr = 0; itr < this.platformSpawns.length; itr++){
+            this.platform = new Platform(this, this.platformSpawns[itr].x, this.platformSpawns[itr].y);
+            this.platform.setTexture("tilemapImage", 9);
+            this.platformsGroup.add(this.platform);
+        }        
+        // this.physics.world.enable(this.platformsGroup, Phaser.Physics.Arcade.DYNAMIC_BODY);
+        this.physics.add.collider(this.p1, this.platformsGroup);
 
         //Set up camera to follow player
         this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels); //Set camera bounds to the tilemap bounds

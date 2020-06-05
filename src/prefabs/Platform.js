@@ -7,6 +7,9 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
 
         scene.physics.add.existing(this);
         scene.add.existing(this); //add object to existing scene, displayList, updateList
+        this.body.allowGravity = false;
+        this.body.immovable = true;
+        this.scale = 2;
         this.movementSpeed = 200;
         this.spawnPoint = x;
         this.goingLeft = false;
