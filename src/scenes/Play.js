@@ -221,7 +221,7 @@ class Play extends Phaser.Scene {
             // repeat: -1,
         });
 
-        this.globalColor = colorGREEN;
+        this.globalColor = colorBLUE;
         this.globalColor.s = sat;
         this.updateColors();
     }
@@ -291,7 +291,7 @@ class Play extends Phaser.Scene {
                 sat += .01;
                 this.globalColor.s += .01
                 if (this.globalColor == colorBLUE) {
-                    this.physics.world.timeScale += .01; // physics
+                    this.physics.world.timeScale = 1 + sat; // physics
                 }
             }
             this.updateColors();
@@ -301,7 +301,7 @@ class Play extends Phaser.Scene {
                 sat -= .01;
                 this.globalColor.s -= .01
                 if (this.globalColor == colorBLUE) {
-                    this.physics.world.timeScale -= .01; // physics
+                    this.physics.world.timeScale = 1 + sat; // physics
                 }
                 this.updateColors();
             }
