@@ -4,7 +4,7 @@ Date Finished:
 Collaborators: Jacob Compton, Eugene Shin, Cole Cota
 */
 
-let config = 
+let config =
 {
     type: Phaser.AUTO,
     pixelArt: true,
@@ -14,31 +14,26 @@ let config =
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
             fps: 100, //This fixed falling through the floor
-            // tileBias: 64,
-            // overlapBias: 17,
+            tileBias: 64,
+            overlapBias: 17,
         },
-        
-        // gravity: {
-        //     x: 0,
-        //     y: 0
-        // }
     },
-    scene: [ Menu, Play],
+    scene: [Menu, Play],
 };
 
 let game = new Phaser.Game(config);
 
 //define game settings
-    game.settings = {
+game.settings = {
     gameTimer: 10000,
 }
 
 let highScore = 0;
 let highestScore;
 // localStorage.clear();
-if(localStorage.getItem("highScore")){
+if (localStorage.getItem("highScore")) {
     highScore = localStorage.getItem("highScore");
 }
 

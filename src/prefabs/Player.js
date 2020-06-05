@@ -7,14 +7,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         scene.physics.add.existing(this);
         scene.add.existing(this); //add object to existing scene, displayList, updateList
-        this.setScale(.3);
-        this.body.setSize(this.width / 2);
-        this.body.setDragX(2000);
+        this.setScale(.2);
+        this.body.setSize(this.width);
+        this.body.setDragX(5000);
         this.body.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
         this.body.setCollideWorldBounds(true);
         this.isJumping = false;
         this.lastCheckpoint;
-        this.xMovement = 2000;
+        this.xMovement = 800;
         this.yMovement = 7000;
         this.facing = 'left';
         this.jumpTimer = 0;
