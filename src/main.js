@@ -14,10 +14,10 @@ let config =
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
             fps: 100, //This fixed falling through the floor
-            // tileBias: 64,
-            // overlapBias: 17,
+            tileBias: 64,
+            overlapBias: 17,
         },
     },
     scene: [Menu, Play],

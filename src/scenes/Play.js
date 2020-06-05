@@ -8,13 +8,8 @@ class Play extends Phaser.Scene {
 
     preload() {
         //load images/tile sprite
-        // this.load.tilemapTiledJSON("testTilemap", "./assets/testTileset.json"); //Tiled JSON file
         this.load.tilemapTiledJSON("tilemapJson", "./assets/finalLevelTilemap.json"); //Tiled JSON file
-        // this.load.spritesheet("tilemapImage", "./assets/colored_packed.png", {
-        //     frameWidth: 16,
-        //     frameHeight: 16
-        // });
-        this.load.spritesheet("tilemapImage", "./assets/ruinTileSheet.png", {
+        this.load.spritesheet("tilemapImage", "./assets/ruinTileSheetFixed.png", {
             frameWidth: 100,
             frameHeight: 100,
         });
@@ -45,15 +40,10 @@ class Play extends Phaser.Scene {
         const tileset = tilemap.addTilesetImage("finalTileset", "tilemapImage");
         const backgroundTileset = tilemap.addTilesetImage("background", "backgroundImage");
         //Create static layers
-        // this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0).setScrollFactor(0.25);
-        this.backgroundLayer = tilemap.createDynamicLayer("Background", backgroundTileset, 0, 0);//.setScrollFactor(0.25);
+        this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0);
         this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
         this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
         this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
-
-        // this.boxColor = bounceColor;
-        // this.boxColor.s = sat;
-        // this.boxCurrent = this.boxColor;
 
         //Set up Tilemap Collision
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
@@ -76,19 +66,12 @@ class Play extends Phaser.Scene {
         this.playerGroup.add(this.p1);
         this.playerGroup.name = 'player';
 
-
         physicsList.add(this.playerGroup);
-
-        // generate box objects from object data
-        // this.boxes = tilemap.createFromObjects("Objects", "Box", {
-        //     key: "tilemapImage",
-        //     frame: 346
-        // }, this);
 
         //Setting up checkpoints
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
-            frame: 19,
+            frame: 300,
         }, this);
 
         this.checkpointGroup = this.add.group(this.checkpoints);
@@ -97,22 +80,11 @@ class Play extends Phaser.Scene {
         //Setting up jump pads
         this.bouncepads = tilemap.createFromObjects("Objects", "Bouncepad", {
             key: "tilemapImage",
-            frame: 15,
+            frame: 300,
         }, this);
 
         this.bouncepadGroup = this.add.group(this.bouncepads);
         this.physics.world.enable(this.bouncepads, Phaser.Physics.Arcade.STATIC_BODY);
-
-        // this.physics.world.enable(this.boxes, Phaser.Physics.Arcade.DYNAMIC_BODY);
-
-        // then add the boxes to a group
-        // this.boxGroup = this.add.group(this.boxes);
-        // this.boxGroup.children.each(function (box) {
-        //     box.body.setFriction(0.5, 0.5);
-        //     box.body.setDrag(100000);
-        // }, this);
-        // this.boxGroup.name = 'box';
-        // physicsList.add(this.boxGroup);
 
         //Set gravity
         this.physics.world.gravity.y = 3000;
@@ -126,8 +98,6 @@ class Play extends Phaser.Scene {
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
-            // console.log("Touching death");
-
             if (!this.p1.dead) {
                 this.p1.dead = true;
                 this.p1.anims.stop();
@@ -150,27 +120,6 @@ class Play extends Phaser.Scene {
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
             this.p1.lastCheckpoint = checkpoint;
         });
-        // this.physics.add.collider(this.p1, this.boxGroup);
-        // this.physics.add.collider(this.boxGroup, this.groundLayer);
-        // this.physics.add.collider(this.boxGroup, this.boxGroup);
-
-
-        // this.physics.add.collider(this.boxGroup, this.boxGroup, function (s1, s2) {
-        //     var b1 = s1.body;
-        //     var b2 = s2.body;
-
-        //     if (b1.y > b2.y) {
-        //         b2.y += (b1.top - b2.bottom);
-        //         b2.stop();
-        //     }
-        //     else {
-        //         b1.y += (b2.top - b1.bottom);
-        //         b1.stop();
-        //     }
-        // });
-
-        // box tint
-        // this.boxGroup.setTint(this.boxColor.color);
 
         //Setting up platforms, had to use filerObjects since we're making them a class
         this.platformSpawns = tilemap.filterObjects("Objects", (object) => {
@@ -184,7 +133,7 @@ class Play extends Phaser.Scene {
         this.platformsGroup = this.add.group();
         for (var itr = 0; itr < this.platformSpawns.length; itr++) {
             this.platform = new Platform(this, this.platformSpawns[itr].x, this.platformSpawns[itr].y);
-            this.platform.setTexture("tilemapImage", 9);
+            this.platform.setTexture("tilemapImage", 104);
             this.platformsGroup.add(this.platform);
         }
         // this.physics.world.enable(this.platformsGroup, Phaser.Physics.Arcade.DYNAMIC_BODY);
@@ -222,8 +171,6 @@ class Play extends Phaser.Scene {
         //     this.gameOver = true;
         // }, null, this);
         //console.log(physicsList);
-
-
 
         this.anims.create({
             key: 'runRight',
@@ -282,7 +229,6 @@ class Play extends Phaser.Scene {
     update(time, delta) {
 
         this.p1.updateTime(this.time.now);
-        // this.camControl.update(delta);
         //keep saturation state between worlds
 
         if (this.globalColor == colorGREEN) {
@@ -290,10 +236,7 @@ class Play extends Phaser.Scene {
                 if (group.name == 'player') {
                     group.children.each(function (child) {
                         child.body.bounce.y = sat;
-                        // child.xMovement = 2000;
-                        // child.yMovement = 7000;
                         this.physics.world.updateMotion(this.p1.body, .00005);
-                        //child.body.setDrag(100000, 0);
                     }, this);
                 }
                 else {
@@ -312,10 +255,6 @@ class Play extends Phaser.Scene {
                     group.children.each(function (child) {
                         child.body.bounce.y = 0;
                         this.physics.world.updateMotion(this.p1.body, .00005);
-                        // child.xMovement = child.xMovement * (1-sat));
-                        // child.yMovement = child.yMovement * (1-sat);
-                        //console.log(child.body.velocity);
-                        // child.body.setDragY(2000*sat);
                     }, this);
                 }
                 else {
@@ -323,17 +262,11 @@ class Play extends Phaser.Scene {
                         child.body.bounce.y = 0;
                         if (sat == 0.99) {
                             child.body.setImmovable(true);
-                            // child.body.setDrag(100000, 0);
                             child.body.veloctiyX = 0;
                             child.body.velocityY = 0;
-                            // child.body.setGravity(-2000);
                         }
-                        else {
-                            //child.body.setImmovable(false);
-                            //child.body.setGravityY(-2000)
-                            // child.body.setGravity(2000);
-                        }
-
+                        // else {
+                        // }
                     }, this);
                 }
             })
@@ -418,107 +351,22 @@ class Play extends Phaser.Scene {
     }
 
     updateColors() {
-        // this.p1.setTint(this.globalColor.color); //Uncomment if we want to change player color
-        if (this.globalColor == colorGREEN) { //Global Color is GREEN, adjust accordingly
-            this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightGREEN.s = this.globalColor.s;
-                    tile.tint = colorLightGREEN.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkGREEN.s = this.globalColor.s;
-                    tile.tint = colorDarkGREEN.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightGREEN.s = this.globalColor.s;
-                    tile.tint = colorLightGREEN.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkGREEN.s = this.globalColor.s;
-                    tile.tint = colorDarkGREEN.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightGREEN.s = this.globalColor.s;
-                    tile.tint = colorLightGREEN.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkGREEN.s = this.globalColor.s;
-                    tile.tint = colorDarkGREEN.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.deathLayer.forEachTile(tile => { //Loop through death layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightGREEN.s = this.globalColor.s;
-                    tile.tint = colorLightGREEN.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkGREEN.s = this.globalColor.s;
-                    tile.tint = colorDarkGREEN.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
-            this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
-            this.playerGroup.setTint(this.globalColor.color);
-            // this.boxGroup.setTint(this.globalColor.color);
-            this.platformsGroup.setTint(this.globalColor.color);
-        } else if (this.globalColor == colorBLUE) { //Global color is Blue, adjust accordingly
-            this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightBLUE.s = this.globalColor.s;
-                    tile.tint = colorLightBLUE.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkBLUE.s = this.globalColor.s;
-                    tile.tint = colorDarkBLUE.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightBLUE.s = this.globalColor.s;
-                    tile.tint = colorLightBLUE.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkBLUE.s = this.globalColor.s;
-                    tile.tint = colorDarkBLUE.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightBLUE.s = this.globalColor.s;
-                    tile.tint = colorLightBLUE.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkBLUE.s = this.globalColor.s;
-                    tile.tint = colorDarkBLUE.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.deathLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
-                if (tile.properties.Shade == "Light") {
-                    colorLightBLUE.s = this.globalColor.s;
-                    tile.tint = colorLightBLUE.color;
-                } else if (tile.properties.Shade == "Dark") {
-                    colorDarkBLUE.s = this.globalColor.s;
-                    tile.tint = colorDarkBLUE.color;
-                } else {
-                    tile.tint = this.globalColor.color;
-                }
-            });
-            this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
-            this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
-            this.playerGroup.setTint(this.globalColor.color);
-            // this.boxGroup.setTint(this.globalColor.color);
-            this.platformsGroup.setTint(this.globalColor.color);
-        }
+        this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
+            tile.tint = this.globalColor.color;
+        });
+        this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
+            tile.tint = this.globalColor.color;
+        });
+        this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
+            tile.tint = this.globalColor.color;
+        });
+        this.deathLayer.forEachTile(tile => { //Loop through death layer and set each tile color depending on its property
+            tile.tint = this.globalColor.color;
+        });
+        this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+        this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
+        this.playerGroup.setTint(this.globalColor.color); //Set tint of player
+        this.platformsGroup.setTint(this.globalColor.color); //Set tint of platforms
+
     }
 }
