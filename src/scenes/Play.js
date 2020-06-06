@@ -144,6 +144,7 @@ class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.p1, true, 0.25, 0.25); //Make camera follow player
         this.cameras.main.setZoom(0.5);
 
+    
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
