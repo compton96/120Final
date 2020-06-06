@@ -16,7 +16,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.lastCheckpoint;
         this.xMovement = 800;
         this.yMovement = 7000;
-        this.facing = 'left';
+        this.facing = 'right';
         this.jumpTimer = 0;
         this.time = 0;
         this.dead = false;

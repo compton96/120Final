@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
 
         this.MAX_X_VEL = 2000;
         this.MAX_Y_VEL = 2000;
+        this.addedGameOverText = false;
     }
 
     preload() {
@@ -38,7 +39,6 @@ class Play extends Phaser.Scene {
         const tilemap = this.add.tilemap("tilemapJson");
         //Add a tile set to the tilemap
         const tileset = tilemap.addTilesetImage("finalTileset", "tilemapImage");
-        const backgroundTileset = tilemap.addTilesetImage("background", "backgroundImage");
         //Create static layers
         this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0);
         this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
@@ -71,11 +71,18 @@ class Play extends Phaser.Scene {
         //Setting up checkpoints
         this.checkpoints = tilemap.createFromObjects("Objects", "Checkpoint", {
             key: "tilemapImage",
-            frame: 300,
+            frame: 304,
         }, this);
-
         this.checkpointGroup = this.add.group(this.checkpoints);
         this.physics.world.enable(this.checkpoints, Phaser.Physics.Arcade.STATIC_BODY);
+
+        //Setting up endGoal
+        this.endGoals = tilemap.createFromObjects("Objects", "EndGoal", {
+            key: "tilemapImage",
+            frame: 400,
+        }, this);
+        this.endGoalGroup = this.add.group(this.endGoals);
+        this.physics.world.enable(this.endGoals, Phaser.Physics.Arcade.STATIC_BODY);
 
         //Setting up jump pads
         this.bouncepads = tilemap.createFromObjects("Objects", "Bouncepad", {
@@ -102,6 +109,7 @@ class Play extends Phaser.Scene {
                 this.p1.dead = true;
                 this.p1.anims.stop();
                 this.p1.play('death');
+                console.log(this.p1);
                 this.p1.once('animationcomplete', () => {
                     // this.p1.once('death', () => {
                     this.p1.x = this.p1.lastCheckpoint.x;
@@ -119,6 +127,19 @@ class Play extends Phaser.Scene {
 
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
             this.p1.lastCheckpoint = checkpoint;
+        });
+
+        this.physics.add.overlap(this.p1, this.endGoalGroup, () => { //When player touches endGoal, set gameOver to true
+            if (!this.gameOver) {
+                this.gameOver = true;
+                this.p1.anims.stop();
+                if (this.p1.facing === 'left') {
+                    this.p1.setFrame('rockDudeRun15.png');
+                }
+                else {
+                    this.p1.setFrame('rockDudeRun1.png');
+                }
+            }
         });
 
         //Setting up platforms, had to use filerObjects since we're making them a class
@@ -272,65 +293,71 @@ class Play extends Phaser.Scene {
             })
         }
 
-        //Input from WASD
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.globalColor = colorGREEN;
-            this.globalColor.s = sat;
-            this.physics.world.timeScale = 1;
-            this.updateColors();
-        }
-        else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-            this.globalColor = colorBLUE;
-            this.globalColor.s = sat;
-            this.physics.world.timeScale = 1 + sat;
-            this.updateColors();
+        //check key input for restart
+        if (this.gameOver) {
+            //Check if they beat high score
+            // if (parseInt(this.clockDisplay.text) > highScore) {
+            //     highScore = this.clockDisplay.text;
+            //     console.log("New Highscore: " + highScore);
+            //     localStorage.setItem("highScore", highScore);
+            // }
+            if (!this.addedGameOverText) {
+                this.addedGameOverText = true;
+                this.gameOverText = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Finished!", scoreConfig).setOrigin(0.5);
+                this.gameOverInstructions = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 400, "Space to Restart or ← for Menu", scoreConfig).setOrigin(0.5);
+            }
+            this.gameOverText.x = this.cameras.main.midPoint.x;
+            this.gameOverText.y = this.cameras.main.midPoint.y - 500;
+            this.gameOverInstructions.x = this.cameras.main.midPoint.x;
+            this.gameOverInstructions.y = this.cameras.main.midPoint.y - 400;
+            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                this.resetSettings();
+                this.scene.restart();
+            } else if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+                // bgMusic.destroy();
+                // bgMusic = null;
+                this.resetSettings();
+                this.scene.start("menuScene");
+            }
         }
 
-        if (keyUP.isDown) {
-            if (sat < .99) {
-                sat += .01;
-                this.globalColor.s += .01
-                if (this.globalColor == colorBLUE) {
-                    this.physics.world.timeScale = 1 + sat; // physics
-                }
+        if (!this.gameOver) {
+
+            //Input from WASD
+            if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+                this.globalColor = colorGREEN;
+                this.globalColor.s = sat;
+                this.physics.world.timeScale = 1;
+                this.updateColors();
             }
-            this.updateColors();
-        }
-        else if (keyDOWN.isDown) {
-            if (sat > 0.01) {
-                sat -= .01;
-                this.globalColor.s -= .01
-                if (this.globalColor == colorBLUE) {
-                    this.physics.world.timeScale = 1 + sat; // physics
+            else if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+                this.globalColor = colorBLUE;
+                this.globalColor.s = sat;
+                this.physics.world.timeScale = 1 + sat;
+                this.updateColors();
+            }
+
+            if (keyUP.isDown) {
+                if (sat < .99) {
+                    sat += .01;
+                    this.globalColor.s += .01
+                    if (this.globalColor == colorBLUE) {
+                        this.physics.world.timeScale += .01; // physics
+                    }
                 }
                 this.updateColors();
             }
-        }
-        if (this.p1.isJumping) {
-            // this.jump.play();
-        }
-        //check key input for restart
-        // if (this.gameOver) {
-        //     //Check if they beat high score
-        //     if (parseInt(this.clockDisplay.text) > highScore) {
-        //         highScore = this.clockDisplay.text;
-        //         console.log("New Highscore: " + highScore);
-        //         localStorage.setItem("highScore", highScore);
-        //     }
-        //     this.add.text(game.config.width / 2, game.config.height / 2, "GAME OVER", scoreConfig).setOrigin(0.5);
-        //     this.add.text(game.config.width / 2, game.config.height / 2 + 64, "Space to Restart or ← for Menu", scoreConfig).setOrigin(0.5);
-        //     if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-        //         this.resetSettings();
-        //         this.scene.restart(this.p1Score);
-        //     } else if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-        //         bgMusic.destroy();
-        //         bgMusic = null;
-        //         this.resetSettings();
-        //         this.scene.start("menuScene");
-        //     }
-        // }
+            else if (keyDOWN.isDown) {
+                if (sat > 0.01) {
+                    sat -= .01;
+                    this.globalColor.s -= .01
+                    if (this.globalColor == colorBLUE) {
+                        this.physics.world.timeScale -= .01; // physics
+                    }
+                    this.updateColors();
+                }
+            }
 
-        if (!this.gameOver) {
             //update sprites here if you want them to pause on game over
             this.p1.update();
             this.platformsGroup.children.each(function (child) {
@@ -364,9 +391,15 @@ class Play extends Phaser.Scene {
             tile.tint = this.globalColor.color;
         });
         this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints
+        this.endGoalGroup.setTint(this.globalColor.color);
         this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
         this.playerGroup.setTint(this.globalColor.color); //Set tint of player
         this.platformsGroup.setTint(this.globalColor.color); //Set tint of platforms
+    }
 
+    resetSettings() {
+        this.addedGameOverText = false;
+        this.globalColor = colorGREEN;
+        sat = 1;
     }
 }
