@@ -59,13 +59,14 @@ let destroyedMenuMusic = false;
 //score display
 let scoreConfig = {
     fontFamily: "Courier",
-    fontSize: "28px",
-    backgroundColor: "#7476ad",
-    color: "#843605",
+    fontSize: "70px",
+    // backgroundColor: "#7476ad",
+    color: "#000000",
     align: "right",
+    // depth: 100,
     padding: {
         top: 5,
         bottom: 5,
     },
-    fixedWidth: 100
+    // fixedWidth: 100
 }
