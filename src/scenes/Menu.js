@@ -18,6 +18,9 @@ class Menu extends Phaser.Scene {
             });
         }
 
+        this.titleText = this.add.text(game.config.width/2, game.config.height/2 - 200, "The Stone Golem", scoreConfig).setOrigin(0.5);
+        this.gameOverInstructions = this.add.text(game.config.width/2, game.config.height/2, "Press Space to Start", scoreConfig).setOrigin(0.5);
+
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -30,17 +33,22 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+        // this.scene.start("playScene");
+        // console.log(this.time.now);
+
+        var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(colorBLUE, colorGREEN, 1, Math.sin(this.time.now / 1000));
+
+        // if(Math.abs(Math.cos(this.time.now/1000)) > .7){
+        //     console.log("BG is green");
+        // }
+
+        // console.log(hexColor);
+        this.cameras.main.setBackgroundColor(hexColor);
+
+        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            // mainMenuBGMusic.destroy();
+            // mainMenuBGMusic = null;
             this.scene.start("playScene");
-            // console.log(this.time.now);
-
-            var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(colorBLUE, colorGREEN, 1, Math.sin(this.time.now/1000));
-
-            // if(Math.abs(Math.cos(this.time.now/1000)) > .7){
-            //     console.log("BG is green");
-            // }
-
-            // console.log(hexColor);
-            this.cameras.main.setBackgroundColor(hexColor);
+        }
     }
-
 }
