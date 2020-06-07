@@ -1,6 +1,6 @@
 /*
 Game Name: The Stone Golem
-Date Finished: 
+Date Finished: 6/7/2020
 Collaborators: Jacob Compton, Eugene Shin, Cole Cota
 */
 
@@ -25,18 +25,6 @@ let config =
 
 let game = new Phaser.Game(config);
 
-//define game settings
-game.settings = {
-    gameTimer: 10000,
-}
-
-let highScore = 0;
-let highestScore;
-// localStorage.clear();
-if (localStorage.getItem("highScore")) {
-    highScore = localStorage.getItem("highScore");
-}
-
 //Reserve some keyboard variables
 let keySPACE, keyLEFT, keyRIGHT, keyDOWN, keyUP, keyW, keyA, keyD, keyS, keyONE, keyTWO, keyTHREE;
 //color vars
@@ -44,29 +32,48 @@ let colorGREEN = Phaser.Display.Color.IntegerToColor('0x0dcd0a');
 let colorBLUE = Phaser.Display.Color.IntegerToColor('0x0bbbde');
 let saturate;
 let globalColor;
-// let boxColor;
-// let boxCurrent;
+let goingToBlue = false;
+let goingToGreen = false;
+
 //global group
 let physicsList;
-//box group
-// let boxGroup;
-// let boxes;
+
 let sat = .99;
 //Global music variables so we can play music through scenes
 let bgMusic;
-let mainMenuBGMusic;
 let destroyedMenuMusic = false;
 //score display
 let scoreConfig = {
-    fontFamily: "Courier",
+    fontFamily: "TradeWinds-Regular",
     fontSize: "70px",
     backgroundColor: "#7476ad",
     color: "#000000",
     align: "right",
-    // depth: 100,
     padding: {
         top: 5,
         bottom: 5,
     },
-    // fixedWidth: 100
+}
+
+let titleConfig = {
+    // fontFamily: "Courier",
+    fontFamily: "TradeWinds-Regular",
+    fontSize: "100px",
+    color: "#000000",
+    align: "right",
+    padding: {
+        top: 5,
+        bottom: 5,
+    },
+}
+
+let mainMenuConfig = {
+    fontFamily: "TradeWinds-Regular",
+    fontSize: "70px",
+    color: "#000000",
+    align: "right",
+    padding: {
+        top: 5,
+        bottom: 5,
+    },
 }
