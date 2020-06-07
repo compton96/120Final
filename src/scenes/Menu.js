@@ -4,6 +4,8 @@ class Menu extends Phaser.Scene {
 
     }
 
+    
+
     preload() {
         this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
     }
@@ -18,8 +20,35 @@ class Menu extends Phaser.Scene {
             });
         }
 
-        this.titleText = this.add.text(game.config.width/2, game.config.height/2 - 200, "The Stone Golem", scoreConfig).setOrigin(0.5);
-        this.gameOverInstructions = this.add.text(game.config.width/2, game.config.height/2, "Press Space to Start or Press A for a tutorial.", scoreConfig).setOrigin(0.5);
+        //Title
+        this.titleText = this.add.text(game.config.width / 2, game.config.height / 2 - 250, "The Stone Golem", titleConfig).setOrigin(0.5);
+
+        //Play Button
+        this.playButton = this.add.text(game.config.width / 2, game.config.height / 2, "Start Game", mainMenuConfig).setOrigin(0.5);
+        this.playButton.setInteractive({ useHandCursor: true});
+        this.playButton.on('pointerdown', () => this.enterButtonActiveState(this.playButton));
+        this.playButton.on('pointerover', () => this.enterButtonHoverState(this.playButton));
+        this.playButton.on('pointerout', () => this.enterButtonRestState(this.playButton));
+        this.playButton.on('pointerup', () => {
+            this.enterButtonHoverState(this.playButton)
+            this.scene.start("playScene");
+        });
+
+        //Tutorial Button
+        this.tutorialButton = this.add.text(game.config.width / 2, game.config.height / 2 + 200, "Tutorial", mainMenuConfig).setOrigin(0.5);
+        this.tutorialButton.setInteractive({ useHandCursor: true});
+        this.tutorialButton.on('pointerdown', () => this.enterButtonActiveState(this.tutorialButton));
+        this.tutorialButton.on('pointerover', () =>  this.enterButtonHoverState(this.tutorialButton));
+        this.tutorialButton.on('pointerout', () =>  this.enterButtonRestState(this.tutorialButton));
+        this.tutorialButton.on('pointerup', () => {
+            this.enterButtonHoverState(this.tutorialButton)
+            this.scene.start("tutorialScene");
+        });
+
+        this.goingToGreen = false;
+        this.goingToBlue = false;
+
+        this.blueToGreen(this.cameras.main);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -34,24 +63,73 @@ class Menu extends Phaser.Scene {
 
     update() {
         // this.scene.start("playScene");
-        // console.log(this.time.now);
 
-        var hexColor = Phaser.Display.Color.Interpolate.ColorWithColor(colorBLUE, colorGREEN, 1, Math.sin(this.time.now / 1000));
+        if(goingToGreen){
+            // console.log("Calling Blue to Green");
+            this.blueToGreen(this.cameras.main);
+        } else if(goingToBlue){
+            // console.log("Calling Green to Blue");
+            this.greenToBlue(this.cameras.main);
+        }
 
-        // if(Math.abs(Math.cos(this.time.now/1000)) > .7){
-        //     console.log("BG is green");
+
+        // if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        //     // mainMenuBGMusic.destroy();
+        //     // mainMenuBGMusic = null;
+        //     this.scene.start("playScene");
         // }
+        // if (Phaser.Input.Keyboard.JustDown(keyA)) {
+        //     this.scene.start("tutorialScene");
+        // }
+    }
 
-        // console.log(hexColor);
-        this.cameras.main.setBackgroundColor(hexColor);
+    blueToGreen(camera) {
+        goingToGreen = false;
+        this.tweens.addCounter({
+            from: 1,
+            to: 100,
+            duration: 5000,
+            onUpdate: function (tween) {
+                var value = Math.floor(tween.getValue());
 
-        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            // mainMenuBGMusic.destroy();
-            // mainMenuBGMusic = null;
-            this.scene.start("playScene");
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyA)) {
-            this.scene.start("tutorialScene");
-        }
+                camera.setBackgroundColor(Phaser.Display.Color.Interpolate.ColorWithColor(colorBLUE, colorGREEN, 100, value));
+                if(value == 100){
+                    goingToGreen = false;
+                    goingToBlue = true;
+                    return;
+                }
+            }
+        });
+    }
+
+    greenToBlue(camera) {
+        goingToBlue = false;
+        this.tweens.addCounter({
+            from: 1,
+            to: 100,
+            duration: 5000,
+            onUpdate: function (tween) {
+                var value = Math.floor(tween.getValue());
+
+                camera.setBackgroundColor(Phaser.Display.Color.Interpolate.ColorWithColor(colorGREEN, colorBLUE, 100, value));
+                if(value == 100){
+                    goingToGreen = true;
+                    goingToBlue = false;
+                    return;
+                }
+            }
+        });
+    }
+
+    enterButtonHoverState(button){
+        button.setStyle({fill: '#e8edea'});
+    }
+
+    enterButtonRestState(button){
+        button.setStyle({fill: '#000000'});
+    }
+
+    enterButtonActiveState(button){
+        button.setStyle({fill: '#c7c7c7'});
     }
 }
