@@ -18,8 +18,8 @@ class Play extends Phaser.Scene {
             frameWidth: 100,
             frameHeight: 100,
         });
-        this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
-        this.load.audio('jump', './assets/honk.mp3');
+        // this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
+        // this.load.audio('jump', './assets/honk.mp3');
         this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json'); //Player
         this.load.image('platform', './assets/platformPlaceholder.png');
     }
@@ -56,7 +56,7 @@ class Play extends Phaser.Scene {
         //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
         //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
         // });
-        this.jump = this.sound.add('jump', { volume: 0.3 });
+        // this.jump = this.sound.add('jump', { volume: 0.3 });
         const p1Spawn = tilemap.findObject("Objects", obj => obj.name === "PlayerSpawn");
 
         //spawn player
@@ -96,7 +96,7 @@ class Play extends Phaser.Scene {
         this.physics.world.enable(this.bouncepads, Phaser.Physics.Arcade.STATIC_BODY);
 
         this.bouncepadGroup.children.each(function (child) {
-            child.body.setSize(190,70);
+            child.body.setSize(190, 70);
             child.body.setOffset(-45, 80);
         }, this);
 
@@ -123,13 +123,11 @@ class Play extends Phaser.Scene {
             if (!this.p1.dead) {
                 this.p1.dead = true;
                 this.p1.anims.stop();
-                if (this.p1.facing == 'left')
-                {
+                if (this.p1.facing == 'left') {
                     // this.p1.play('deathLeft');
                     this.p1.play('deathRight');
                 }
-                else
-                {
+                else {
                     this.p1.play('deathRight');
                 }
                 console.log(this.p1);
@@ -181,7 +179,6 @@ class Play extends Phaser.Scene {
             this.platform.body.setSize(100, 30, 0, 0);
             this.platformsGroup.add(this.platform);
         }
-        // this.physics.world.enable(this.platformsGroup, Phaser.Physics.Arcade.DYNAMIC_BODY);
         this.physics.add.collider(this.p1, this.platformsGroup);
 
         //Set up camera to follow player
@@ -189,7 +186,7 @@ class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.p1, true, 0.25, 0.25); //Make camera follow player
         this.cameras.main.setZoom(0.5);
 
-    
+
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -204,19 +201,7 @@ class Play extends Phaser.Scene {
         keyTHREE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
 
         scoreConfig.fixedWidth = 0;
-        //this.clockDisplay = this.add.text(game.config.width / 2, 42, "Time: " + this.game.settings.gameTimer, scoreConfig);
-        //this.highestScore = this.add.text(game.config.width / 2, 42 + 64, "Current Highscore: " + localStorage.getItem("highScore"), scoreConfig).setOrigin(0.5);
-        //game over flag
         this.gameOver = false;
-
-        //play clock
-        // scoreConfig.fixedWidth = 0;
-        // this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-        //     this.add.text(game.config.width / 2, game.config.height / 2, "GAME OVER", scoreConfig).setOrigin(0.5);
-        //     this.add.text(game.config.width / 2, game.config.height / 2 + 64, "Space to Restart or ← for Menu", scoreConfig).setOrigin(0.5);
-        //     this.gameOver = true;
-        // }, null, this);
-        //console.log(physicsList);
 
         this.anims.create({
             key: 'runRight',
@@ -293,6 +278,7 @@ class Play extends Phaser.Scene {
 
         this.globalColor = colorBLUE;
         this.globalColor.s = sat;
+        this.physics.world.timeScale = 1 + sat; //So player is slow on blue start
         this.updateColors();
     }
 
@@ -300,7 +286,6 @@ class Play extends Phaser.Scene {
 
         this.p1.updateTime(this.time.now);
         //keep saturation state between worlds
-
         if (this.globalColor == colorGREEN) {
             physicsList.each((group) => {
                 if (group.name == 'player') {
@@ -335,8 +320,6 @@ class Play extends Phaser.Scene {
                             child.body.veloctiyX = 0;
                             child.body.velocityY = 0;
                         }
-                        // else {
-                        // }
                     }, this);
                 }
             })
@@ -344,12 +327,6 @@ class Play extends Phaser.Scene {
 
         //check key input for restart
         if (this.gameOver) {
-            //Check if they beat high score
-            // if (parseInt(this.clockDisplay.text) > highScore) {
-            //     highScore = this.clockDisplay.text;
-            //     console.log("New Highscore: " + highScore);
-            //     localStorage.setItem("highScore", highScore);
-            // }
             if (!this.addedGameOverText) {
                 this.addedGameOverText = true;
                 this.gameOverText = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Finished!", scoreConfig).setOrigin(0.5);
@@ -413,16 +390,6 @@ class Play extends Phaser.Scene {
                 child.color = this.globalColor;
                 child.update();
             }, this);
-
-            // if (parseInt(this.clockDisplay.text) > highScore) {
-            //     highScore = this.clockDisplay.text;
-            //     console.log("New Highscore: " + highScore);
-            //     localStorage.setItem("highScore", highScore);
-            //     this.highestScore.setText("Current Highscore: " + localStorage.getItem("highScore"));
-            // }
-
-            //Update timer text
-            //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
         }
     }
 

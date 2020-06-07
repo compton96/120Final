@@ -4,8 +4,6 @@ class Menu extends Phaser.Scene {
 
     }
 
-    
-
     preload() {
         this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
     }
@@ -25,7 +23,7 @@ class Menu extends Phaser.Scene {
 
         //Play Button
         this.playButton = this.add.text(game.config.width / 2, game.config.height / 2, "Start Game", mainMenuConfig).setOrigin(0.5);
-        this.playButton.setInteractive({ useHandCursor: true});
+        this.playButton.setInteractive({ useHandCursor: true });
         this.playButton.on('pointerdown', () => this.enterButtonActiveState(this.playButton));
         this.playButton.on('pointerover', () => this.enterButtonHoverState(this.playButton));
         this.playButton.on('pointerout', () => this.enterButtonRestState(this.playButton));
@@ -36,10 +34,10 @@ class Menu extends Phaser.Scene {
 
         //Tutorial Button
         this.tutorialButton = this.add.text(game.config.width / 2, game.config.height / 2 + 200, "Tutorial", mainMenuConfig).setOrigin(0.5);
-        this.tutorialButton.setInteractive({ useHandCursor: true});
+        this.tutorialButton.setInteractive({ useHandCursor: true });
         this.tutorialButton.on('pointerdown', () => this.enterButtonActiveState(this.tutorialButton));
-        this.tutorialButton.on('pointerover', () =>  this.enterButtonHoverState(this.tutorialButton));
-        this.tutorialButton.on('pointerout', () =>  this.enterButtonRestState(this.tutorialButton));
+        this.tutorialButton.on('pointerover', () => this.enterButtonHoverState(this.tutorialButton));
+        this.tutorialButton.on('pointerout', () => this.enterButtonRestState(this.tutorialButton));
         this.tutorialButton.on('pointerup', () => {
             this.enterButtonHoverState(this.tutorialButton)
             this.scene.start("tutorialScene");
@@ -64,10 +62,10 @@ class Menu extends Phaser.Scene {
     update() {
         // this.scene.start("playScene");
 
-        if(goingToGreen){
+        if (goingToGreen) {
             // console.log("Calling Blue to Green");
             this.blueToGreen(this.cameras.main);
-        } else if(goingToBlue){
+        } else if (goingToBlue) {
             // console.log("Calling Green to Blue");
             this.greenToBlue(this.cameras.main);
         }
@@ -93,7 +91,7 @@ class Menu extends Phaser.Scene {
                 var value = Math.floor(tween.getValue());
 
                 camera.setBackgroundColor(Phaser.Display.Color.Interpolate.ColorWithColor(colorBLUE, colorGREEN, 100, value));
-                if(value == 100){
+                if (value == 100) {
                     goingToGreen = false;
                     goingToBlue = true;
                     return;
@@ -112,7 +110,7 @@ class Menu extends Phaser.Scene {
                 var value = Math.floor(tween.getValue());
 
                 camera.setBackgroundColor(Phaser.Display.Color.Interpolate.ColorWithColor(colorGREEN, colorBLUE, 100, value));
-                if(value == 100){
+                if (value == 100) {
                     goingToGreen = true;
                     goingToBlue = false;
                     return;
@@ -121,15 +119,15 @@ class Menu extends Phaser.Scene {
         });
     }
 
-    enterButtonHoverState(button){
-        button.setStyle({fill: '#e8edea'});
+    enterButtonHoverState(button) {
+        button.setStyle({ fill: '#e8edea' });
     }
 
-    enterButtonRestState(button){
-        button.setStyle({fill: '#000000'});
+    enterButtonRestState(button) {
+        button.setStyle({ fill: '#000000' });
     }
 
-    enterButtonActiveState(button){
-        button.setStyle({fill: '#c7c7c7'});
+    enterButtonActiveState(button) {
+        button.setStyle({ fill: '#c7c7c7' });
     }
 }

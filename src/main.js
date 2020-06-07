@@ -44,7 +44,7 @@ let bgMusic;
 let destroyedMenuMusic = false;
 //score display
 let scoreConfig = {
-    fontFamily: "Courier",
+    fontFamily: "TradeWinds-Regular",
     fontSize: "70px",
     backgroundColor: "#7476ad",
     color: "#000000",
@@ -56,7 +56,8 @@ let scoreConfig = {
 }
 
 let titleConfig = {
-    fontFamily: "Courier",
+    // fontFamily: "Courier",
+    fontFamily: "TradeWinds-Regular",
     fontSize: "100px",
     color: "#000000",
     align: "right",
@@ -67,7 +68,7 @@ let titleConfig = {
 }
 
 let mainMenuConfig = {
-    fontFamily: "Courier",
+    fontFamily: "TradeWinds-Regular",
     fontSize: "70px",
     color: "#000000",
     align: "right",
