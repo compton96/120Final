@@ -3,7 +3,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture);
 
         this.MAX_X_VEL = 10000;
-        this.MAX_Y_VEL = 2000;
+        this.MAX_Y_VEL = 2500;
 
         scene.physics.add.existing(this);
         scene.add.existing(this); //add object to existing scene, displayList, updateList
@@ -15,7 +15,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.isJumping = false;
         this.lastCheckpoint;
         this.xMovement = 800;
-        this.yMovement = 7000;
+        this.yMovement = 1800;
         this.facing = 'right';
         this.jumpTimer = 0;
         this.time = 0;
@@ -61,7 +61,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (standing && keySPACE.isDown && this.time > this.jumpTimer) {
                 this.setVelocityY(-this.yMovement);
                 this.jumpTimer = this.time + 750;
-                this.play('jump');
+                if(this.facing == 'left')
+                {
+                    // this.play('jumpLeft');
+                }
+                else
+                {
+                    this.play('jumpRight');
+                }
                 this.isJumping = true;
             }
             if(this.jumpTimer < this.time && this.isJumping){

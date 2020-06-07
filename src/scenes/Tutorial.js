@@ -1,15 +1,15 @@
-class Play extends Phaser.Scene {
+class Tutorial extends Phaser.Scene {
     constructor() {
-        super("playScene");
-
+        super("tutorialScene");
         this.MAX_X_VEL = 2000;
         this.MAX_Y_VEL = 2000;
         this.addedGameOverText = false;
     }
 
+
     preload() {
         //load images/tile sprite
-        this.load.tilemapTiledJSON("tilemapJson", "./assets/finalLevelTilemap.json"); //Tiled JSON file
+        this.load.tilemapTiledJSON("tilemapJson", "./assets/tutorialTilemap.json"); //Tiled JSON file
         this.load.spritesheet("tilemapImage", "./assets/ruinTileSheetFixed.png", {
             frameWidth: 100,
             frameHeight: 100,
@@ -21,7 +21,6 @@ class Play extends Phaser.Scene {
         this.load.audio('bgMusic', './assets/TalesfromtheLoop.mp3');
         this.load.audio('jump', './assets/honk.mp3');
         this.load.atlas('animation', './assets/rock_boi_run.png', './assets/rock_boi_run_atlas.json'); //Player
-        this.load.image('platform', './assets/platformPlaceholder.png');
     }
 
     create() {
@@ -38,15 +37,13 @@ class Play extends Phaser.Scene {
         //Add a tilemap
         const tilemap = this.add.tilemap("tilemapJson");
         //Add a tile set to the tilemap
-        const tileset = tilemap.addTilesetImage("finalTileset", "tilemapImage");
+        const tileset = tilemap.addTilesetImage("tilemap", "tilemapImage");
         //Create static layers
         this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0);
-        this.groundLayer = tilemap.createDynamicLayer("Ground", tileset, 0, 0);
-        this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
         this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
 
         //Set up Tilemap Collision
-        this.groundLayer.setCollisionByProperty({ hasCollision: true });
+        this.backgroundLayer.setCollisionByProperty({ hasCollision: true });
         this.deathLayer.setCollisionByProperty({ hasCollision: true });
 
         //Define a render debug so we can see the Tilemap's collision bounds
@@ -113,7 +110,7 @@ class Play extends Phaser.Scene {
             // this.jump.stop();
         });
 
-        this.physics.add.collider(this.p1, this.groundLayer, () => { //When player touches the floor layer, allow them to jump again
+        this.physics.add.collider(this.p1, this.backgroundLayer, () => { //When player touches the floor layer, allow them to jump again
             //this.p1.body.bounce.y = sat;
             // this.p1.isJumping = false;
             // this.jump.stop();
@@ -123,15 +120,7 @@ class Play extends Phaser.Scene {
             if (!this.p1.dead) {
                 this.p1.dead = true;
                 this.p1.anims.stop();
-                if (this.p1.facing == 'left')
-                {
-                    // this.p1.play('deathLeft');
-                    this.p1.play('deathRight');
-                }
-                else
-                {
-                    this.p1.play('deathRight');
-                }
+                this.p1.play('death');
                 console.log(this.p1);
                 this.p1.once('animationcomplete', () => {
                     // this.p1.once('death', () => {
@@ -352,7 +341,7 @@ class Play extends Phaser.Scene {
             // }
             if (!this.addedGameOverText) {
                 this.addedGameOverText = true;
-                this.gameOverText = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Finished!", scoreConfig).setOrigin(0.5);
+                this.gameOverText = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "You finished the tutorial!", scoreConfig).setOrigin(0.5);
                 this.gameOverInstructions = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 400, "Space to Restart or ← for Menu", scoreConfig).setOrigin(0.5);
             }
             this.gameOverText.x = this.cameras.main.midPoint.x;
@@ -369,8 +358,52 @@ class Play extends Phaser.Scene {
                 this.scene.start("menuScene");
             }
         }
+        this.dialogueOn = false;
+        this.walk = false;
+        this.jump = false;
+        this.col = false;
+        this.check = false;
+        this.goal = false;
 
-        if (!this.gameOver) {
+        if(this.p1.body.x == 150 && !this.walk)
+        {
+            this.walk = true;
+            this.dialogueOn = true;
+            this.walkTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Move left with A and right with D.", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(300, () => { this.dialogueOn = false; this.walkTalk.destroy();}, null, this)
+        }
+        if(this.p1.body.x == 500 && !this.jump)
+        {
+            this.jump = true;
+            this.dialogueOn = true;
+            this.jumpTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Press Space to Jump! Try jumping on the jump pad in front of you.", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.jumpTalk.destroy(); }, null, this)
+        }
+        if(this.p1.body.x == 900 && !this.col)
+        {
+            this.col = true;
+            this.dialogueOn = true;
+            this.colTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Change the colors of the world by using the arrow keys!", scoreConfig).setOrigin(0.5);
+            this.col2Talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 450, "Green is a bouncy world while Blue slows the world down.", scoreConfig).setOrigin(0.5);
+            this.col3Talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 400, "Experiment with changing the saturation with the up and down arrows keys to affect the world!", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.colTalk.destroy(); this.col2Talk.destroy(); this.col3Talk.destroy();}, null, this)
+        }
+        if(this.p1.body.x == 1200 && !this.check)
+        {
+            this.check = true;
+            this.dialogueOn = true;
+            this.checkTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Once you reach a checkpoitn flag you will respawn there when you die.", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.checkTalk.destroy();}, null, this)
+        }
+        if(this.p1.body.x == 250 && !this.goal)
+        {
+            this.goal = true;
+            this.dialogueOn = true;
+            this.goalTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Reach the goal to win the level!", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.goalTalk.destroy();}, null, this)
+        }
+
+        if (!this.gameOver && !this.dialogueOn) {
 
             //Input from WASD
             if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
@@ -427,13 +460,7 @@ class Play extends Phaser.Scene {
     }
 
     updateColors() {
-        this.groundLayer.forEachTile(tile => { //Loop through ground layer and set each tile color depending on its property
-            tile.tint = this.globalColor.color;
-        });
         this.backgroundLayer.forEachTile(tile => { //Loop through background layer and set each tile color depending on its property
-            tile.tint = this.globalColor.color;
-        });
-        this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
             tile.tint = this.globalColor.color;
         });
         this.deathLayer.forEachTile(tile => { //Loop through death layer and set each tile color depending on its property

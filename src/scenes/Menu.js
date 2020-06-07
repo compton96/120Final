@@ -19,7 +19,7 @@ class Menu extends Phaser.Scene {
         }
 
         this.titleText = this.add.text(game.config.width/2, game.config.height/2 - 200, "The Stone Golem", scoreConfig).setOrigin(0.5);
-        this.gameOverInstructions = this.add.text(game.config.width/2, game.config.height/2, "Press Space to Start", scoreConfig).setOrigin(0.5);
+        this.gameOverInstructions = this.add.text(game.config.width/2, game.config.height/2, "Press Space to Start or Press A for a tutorial.", scoreConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -49,6 +49,9 @@ class Menu extends Phaser.Scene {
             // mainMenuBGMusic.destroy();
             // mainMenuBGMusic = null;
             this.scene.start("playScene");
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyA)) {
+            this.scene.start("tutorialScene");
         }
     }
 }

@@ -20,7 +20,7 @@ let config =
             overlapBias: 17,
         },
     },
-    scene: [Menu, Play],
+    scene: [Menu, Tutorial, Play],
 };
 
 let game = new Phaser.Game(config);
@@ -60,7 +60,7 @@ let destroyedMenuMusic = false;
 let scoreConfig = {
     fontFamily: "Courier",
     fontSize: "70px",
-    // backgroundColor: "#7476ad",
+    backgroundColor: "#7476ad",
     color: "#000000",
     align: "right",
     // depth: 100,
