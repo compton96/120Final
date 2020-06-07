@@ -20,6 +20,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.jumpTimer = 0;
         this.time = 0;
         this.dead = false;
+        this.body.setSize(900, 1150);
+        this.body.setOffset(300, 250);
     }
 
     update() {
@@ -63,7 +65,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.jumpTimer = this.time + 750;
                 if(this.facing == 'left')
                 {
-                    // this.play('jumpLeft');
+                    this.play('jumpLeft');
                 }
                 else
                 {
@@ -80,16 +82,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     this.setFrame('rockDudeRun1.png');
                 }
             }
-            // if (standing && this.isJumping) {
-            //     this.isJumping = false;
-            //     if (this.facing === 'left') {
-            //         this.setFrame('rockDudeRun15.png');
-            //     }
-            //     else {
-            //         this.setFrame('rockDudeRun1.png');
-            //     }
-            //     // this.anims.stop();
-            // }
+            if (standing && this.isJumping) {
+                this.isJumping = false;
+                if (this.facing === 'left') {
+                    this.setFrame('rockDudeRun15.png');
+                }
+                else {
+                    this.setFrame('rockDudeRun1.png');
+                }
+                // this.anims.stop();
+            }
         }
     }
     updateTime(num) {

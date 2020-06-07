@@ -60,10 +60,190 @@
 				"h": 1500
 			}
 		},
-		"rockDudeDeath2.png": {
+		"rockDudeDeath12.png": {
 			"frame": {
 				"x": 4507,
 				"y": 1,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath121.png": {
+			"frame": {
+				"x": 6008,
+				"y": 1,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath13.png": {
+			"frame": {
+				"x": 7509,
+				"y": 1,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath14.png": {
+			"frame": {
+				"x": 9010,
+				"y": 1,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath15.png": {
+			"frame": {
+				"x": 10511,
+				"y": 1,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath16.png": {
+			"frame": {
+				"x": 4507,
+				"y": 1502,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath17.png": {
+			"frame": {
+				"x": 6008,
+				"y": 1502,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath18.png": {
+			"frame": {
+				"x": 7509,
+				"y": 1502,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath19.png": {
+			"frame": {
+				"x": 9010,
+				"y": 1502,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath2.png": {
+			"frame": {
+				"x": 10511,
+				"y": 1502,
 				"w": 1500,
 				"h": 1500
 			},
@@ -80,10 +260,50 @@
 				"h": 1500
 			}
 		},
+		"rockDudeDeath20.png": {
+			"frame": {
+				"x": 1,
+				"y": 3004,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeDeath22.png": {
+			"frame": {
+				"x": 1502,
+				"y": 3004,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
 		"rockDudeDeath3.png": {
 			"frame": {
-				"x": 6009,
-				"y": 1,
+				"x": 3003,
+				"y": 3004,
 				"w": 1500,
 				"h": 1500
 			},
@@ -102,8 +322,8 @@
 		},
 		"rockDudeDeath4.png": {
 			"frame": {
-				"x": 7511,
-				"y": 1,
+				"x": 4505,
+				"y": 3004,
 				"w": 1500,
 				"h": 1500
 			},
@@ -122,8 +342,8 @@
 		},
 		"rockDudeDeath5.png": {
 			"frame": {
-				"x": 1,
-				"y": 1503,
+				"x": 6007,
+				"y": 3004,
 				"w": 1500,
 				"h": 1500
 			},
@@ -142,8 +362,8 @@
 		},
 		"rockDudeDeath6.png": {
 			"frame": {
-				"x": 1503,
-				"y": 1503,
+				"x": 7509,
+				"y": 3004,
 				"w": 1500,
 				"h": 1500
 			},
@@ -162,8 +382,8 @@
 		},
 		"rockDudeDeath7.png": {
 			"frame": {
-				"x": 3005,
-				"y": 1503,
+				"x": 9011,
+				"y": 3004,
 				"w": 1500,
 				"h": 1500
 			},
@@ -182,8 +402,8 @@
 		},
 		"rockDudeDeath8.png": {
 			"frame": {
-				"x": 4507,
-				"y": 1503,
+				"x": 1,
+				"y": 4506,
 				"w": 1500,
 				"h": 1500
 			},
@@ -202,8 +422,8 @@
 		},
 		"rockDudeDeath9.png": {
 			"frame": {
-				"x": 6009,
-				"y": 1503,
+				"x": 1503,
+				"y": 4506,
 				"w": 1500,
 				"h": 1500
 			},
@@ -222,8 +442,8 @@
 		},
 		"rockDudeJump1.png": {
 			"frame": {
-				"x": 7511,
-				"y": 1503,
+				"x": 3005,
+				"y": 4506,
 				"w": 1500,
 				"h": 1500
 			},
@@ -240,10 +460,110 @@
 				"h": 1500
 			}
 		},
+		"rockDudeJump10.png": {
+			"frame": {
+				"x": 10513,
+				"y": 3004,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeJump11.png": {
+			"frame": {
+				"x": 10513,
+				"y": 4505,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeJump12.png": {
+			"frame": {
+				"x": 4507,
+				"y": 6006,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeJump13.png": {
+			"frame": {
+				"x": 6008,
+				"y": 6006,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeJump14.png": {
+			"frame": {
+				"x": 7509,
+				"y": 6006,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
 		"rockDudeJump2.png": {
 			"frame": {
-				"x": 1,
-				"y": 3005,
+				"x": 9010,
+				"y": 4506,
 				"w": 1500,
 				"h": 1500
 			},
@@ -262,8 +582,8 @@
 		},
 		"rockDudeJump3.png": {
 			"frame": {
-				"x": 1503,
-				"y": 3005,
+				"x": 10512,
+				"y": 6006,
 				"w": 1500,
 				"h": 1500
 			},
@@ -282,8 +602,8 @@
 		},
 		"rockDudeJump4.png": {
 			"frame": {
-				"x": 3005,
-				"y": 3005,
+				"x": 1,
+				"y": 7508,
 				"w": 1500,
 				"h": 1500
 			},
@@ -302,8 +622,8 @@
 		},
 		"rockDudeJump5.png": {
 			"frame": {
-				"x": 4507,
-				"y": 3005,
+				"x": 1503,
+				"y": 7508,
 				"w": 1500,
 				"h": 1500
 			},
@@ -322,8 +642,8 @@
 		},
 		"rockDudeJump6.png": {
 			"frame": {
-				"x": 6009,
-				"y": 3005,
+				"x": 3005,
+				"y": 7508,
 				"w": 1500,
 				"h": 1500
 			},
@@ -342,8 +662,8 @@
 		},
 		"rockDudeJump7.png": {
 			"frame": {
-				"x": 7511,
-				"y": 3005,
+				"x": 4507,
+				"y": 7508,
 				"w": 1500,
 				"h": 1500
 			},
@@ -360,10 +680,50 @@
 				"h": 1500
 			}
 		},
+		"rockDudeJump8.png": {
+			"frame": {
+				"x": 6009,
+				"y": 7508,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
+		"rockDudeJump9.png": {
+			"frame": {
+				"x": 7510,
+				"y": 7508,
+				"w": 1499,
+				"h": 1499
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 1499,
+				"h": 1499
+			},
+			"sourceSize": {
+				"w": 1499,
+				"h": 1499
+			}
+		},
 		"rockDudeRun1.png": {
 			"frame": {
-				"x": 1,
-				"y": 4507,
+				"x": 9011,
+				"y": 7508,
 				"w": 1500,
 				"h": 1500
 			},
@@ -382,8 +742,8 @@
 		},
 		"rockDudeRun10.png": {
 			"frame": {
-				"x": 1503,
-				"y": 4507,
+				"x": 1,
+				"y": 9010,
 				"w": 1500,
 				"h": 1500
 			},
@@ -402,8 +762,8 @@
 		},
 		"rockDudeRun11.png": {
 			"frame": {
-				"x": 3005,
-				"y": 4507,
+				"x": 1503,
+				"y": 9010,
 				"w": 1500,
 				"h": 1500
 			},
@@ -422,8 +782,8 @@
 		},
 		"rockDudeRun12.png": {
 			"frame": {
-				"x": 4507,
-				"y": 4507,
+				"x": 3005,
+				"y": 9010,
 				"w": 1500,
 				"h": 1500
 			},
@@ -442,8 +802,8 @@
 		},
 		"rockDudeRun13.png": {
 			"frame": {
-				"x": 6009,
-				"y": 4507,
+				"x": 4507,
+				"y": 9010,
 				"w": 1500,
 				"h": 1500
 			},
@@ -462,8 +822,8 @@
 		},
 		"rockDudeRun14.png": {
 			"frame": {
-				"x": 7511,
-				"y": 4507,
+				"x": 6009,
+				"y": 9010,
 				"w": 1500,
 				"h": 1500
 			},
@@ -482,8 +842,8 @@
 		},
 		"rockDudeRun15.png": {
 			"frame": {
-				"x": 1,
-				"y": 6009,
+				"x": 10513,
+				"y": 7508,
 				"w": 1499,
 				"h": 1499
 			},
@@ -502,8 +862,8 @@
 		},
 		"rockDudeRun16.png": {
 			"frame": {
-				"x": 1502,
-				"y": 6009,
+				"x": 10513,
+				"y": 9009,
 				"w": 1499,
 				"h": 1499
 			},
@@ -522,8 +882,8 @@
 		},
 		"rockDudeRun17.png": {
 			"frame": {
-				"x": 3003,
-				"y": 6009,
+				"x": 7511,
+				"y": 10510,
 				"w": 1499,
 				"h": 1499
 			},
@@ -542,8 +902,8 @@
 		},
 		"rockDudeRun18.png": {
 			"frame": {
-				"x": 4504,
-				"y": 6009,
+				"x": 9012,
+				"y": 10510,
 				"w": 1499,
 				"h": 1499
 			},
@@ -562,8 +922,8 @@
 		},
 		"rockDudeRun19.png": {
 			"frame": {
-				"x": 6005,
-				"y": 6009,
+				"x": 12013,
+				"y": 1,
 				"w": 1500,
 				"h": 1500
 			},
@@ -582,8 +942,8 @@
 		},
 		"rockDudeRun2.png": {
 			"frame": {
-				"x": 7507,
-				"y": 6009,
+				"x": 12014,
+				"y": 1503,
 				"w": 1500,
 				"h": 1500
 			},
@@ -603,7 +963,7 @@
 		"rockDudeRun20.png": {
 			"frame": {
 				"x": 1,
-				"y": 7511,
+				"y": 1503,
 				"w": 1499,
 				"h": 1499
 			},
@@ -623,7 +983,7 @@
 		"rockDudeRun21.png": {
 			"frame": {
 				"x": 1502,
-				"y": 7511,
+				"y": 1503,
 				"w": 1499,
 				"h": 1499
 			},
@@ -643,7 +1003,7 @@
 		"rockDudeRun22.png": {
 			"frame": {
 				"x": 3003,
-				"y": 7511,
+				"y": 1503,
 				"w": 1499,
 				"h": 1499
 			},
@@ -662,8 +1022,8 @@
 		},
 		"rockDudeRun23.png": {
 			"frame": {
-				"x": 4504,
-				"y": 7511,
+				"x": 12014,
+				"y": 3005,
 				"w": 1499,
 				"h": 1499
 			},
@@ -682,8 +1042,8 @@
 		},
 		"rockDudeRun24.png": {
 			"frame": {
-				"x": 6005,
-				"y": 7511,
+				"x": 12014,
+				"y": 4506,
 				"w": 1499,
 				"h": 1499
 			},
@@ -702,8 +1062,8 @@
 		},
 		"rockDudeRun25.png": {
 			"frame": {
-				"x": 7506,
-				"y": 7511,
+				"x": 12014,
+				"y": 6007,
 				"w": 1499,
 				"h": 1499
 			},
@@ -722,8 +1082,8 @@
 		},
 		"rockDudeRun26.png": {
 			"frame": {
-				"x": 9013,
-				"y": 1,
+				"x": 12014,
+				"y": 7508,
 				"w": 1499,
 				"h": 1499
 			},
@@ -742,8 +1102,8 @@
 		},
 		"rockDudeRun27.png": {
 			"frame": {
-				"x": 9013,
-				"y": 1502,
+				"x": 12014,
+				"y": 9009,
 				"w": 1499,
 				"h": 1499
 			},
@@ -762,8 +1122,8 @@
 		},
 		"rockDudeRun28.png": {
 			"frame": {
-				"x": 9013,
-				"y": 3003,
+				"x": 10513,
+				"y": 10510,
 				"w": 1500,
 				"h": 1500
 			},
@@ -782,8 +1142,8 @@
 		},
 		"rockDudeRun3.png": {
 			"frame": {
-				"x": 9013,
-				"y": 4505,
+				"x": 1,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -802,8 +1162,8 @@
 		},
 		"rockDudeRun4.png": {
 			"frame": {
-				"x": 9013,
-				"y": 6007,
+				"x": 1503,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -822,8 +1182,8 @@
 		},
 		"rockDudeRun5.png": {
 			"frame": {
-				"x": 9009,
-				"y": 7509,
+				"x": 3005,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -842,8 +1202,8 @@
 		},
 		"rockDudeRun6.png": {
 			"frame": {
-				"x": 9007,
-				"y": 9011,
+				"x": 4507,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -862,8 +1222,8 @@
 		},
 		"rockDudeRun7.png": {
 			"frame": {
-				"x": 10514,
-				"y": 1,
+				"x": 6009,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -882,8 +1242,8 @@
 		},
 		"rockDudeRun8.png": {
 			"frame": {
-				"x": 10515,
-				"y": 1503,
+				"x": 7511,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -902,8 +1262,8 @@
 		},
 		"rockDudeRun9.png": {
 			"frame": {
-				"x": 10515,
-				"y": 3005,
+				"x": 9013,
+				"y": 12012,
 				"w": 1500,
 				"h": 1500
 			},
@@ -927,8 +1287,8 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 12016,
-			"h": 10512
+			"w": 13515,
+			"h": 13513
 		},
 		"scale": "1"
 	}

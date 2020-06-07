@@ -117,15 +117,24 @@ class Play extends Phaser.Scene {
             //this.p1.body.bounce.y = sat;
             // this.p1.isJumping = false;
             // this.jump.stop();
+            if (this.p1.facing === 'left') {
+                this.p1.setFrame('rockDudeRun15.png');
+            }
+            else {
+                this.p1.setFrame('rockDudeRun1.png');
+            }
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
             if (!this.p1.dead) {
+                console.log("poop");
                 this.p1.dead = true;
                 this.p1.anims.stop();
-                if (this.p1.facing == 'left') {
-                    // this.p1.play('deathLeft');
-                    this.p1.play('deathRight');
+
+                if (this.p1.facing == 'left')
+                {
+                    this.p1.play('deathLeft');
+
                 }
                 else {
                     this.p1.play('deathRight');
