@@ -61,6 +61,21 @@ class Play extends Phaser.Scene {
             collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
             faceColor: new Phaser.Display.Color(40, 39, 37, 255)
         });
+
+        this.crusherSpawns = tilemap.filterObjects("Objects", (object) => {
+            if (object.name == "Crusher") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        this.crusherGroup = this.add.group();
+        for (var itr = 0; itr < this.crusherSpawns.length; itr++) {
+            this.crusher = new Crusher(this, this.crusherSpawns[itr].x, this.crusherSpawns[itr].y);
+            this.crusher.setTexture("tilemapImage", 204);
+            this.crusherGroup.add(this.crusher);
+        }
+
         // this.jump = this.sound.add('jump', { volume: 0.3 });
         const p1Spawn = tilemap.findObject("Objects", obj => obj.name === "PlayerSpawn");
 
@@ -138,7 +153,28 @@ class Play extends Phaser.Scene {
                 else {
                     this.p1.play('deathRight');
                 }
-                console.log(this.p1);
+                this.p1.once('animationcomplete', () => {
+                    // this.p1.once('death', () => {
+                    this.p1.x = this.p1.lastCheckpoint.x;
+                    this.p1.y = this.p1.lastCheckpoint.y - 100;
+                    this.p1.dead = false;
+                    this.p1.setFrame('rockDudeRun1.png');
+                }, this);
+            }
+        });
+        this.physics.add.collider(this.p1, this.crusherGroup, () => { //When player touches deadly objects, respawn at last checkpoint
+            if (!this.p1.dead) {
+                this.p1.dead = true;
+                this.p1.anims.stop();
+
+                if (this.p1.facing == 'left' || this.p1.facing === 'idleLeft')
+                {
+                    this.p1.play('deathLeft');
+
+                }
+                else {
+                    this.p1.play('deathRight');
+                }
                 this.p1.once('animationcomplete', () => {
                     // this.p1.once('death', () => {
                     this.p1.x = this.p1.lastCheckpoint.x;
@@ -174,6 +210,7 @@ class Play extends Phaser.Scene {
                 return false;
             }
         });
+        
 
         this.platformsGroup = this.add.group();
         for (var itr = 0; itr < this.platformSpawns.length; itr++) {
@@ -183,6 +220,8 @@ class Play extends Phaser.Scene {
             this.platformsGroup.add(this.platform);
         }
         this.physics.add.collider(this.p1, this.platformsGroup);
+
+
 
         //Set up camera to follow player
         this.cameras.main.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels); //Set camera bounds to the tilemap bounds
@@ -402,6 +441,10 @@ class Play extends Phaser.Scene {
                 child.color = this.globalColor;
                 child.update();
             }, this);
+            this.crusherGroup.children.each(function (child) {
+                child.color = this.globalColor;
+                child.update();
+            }, this);
         }
     }
 
@@ -422,7 +465,8 @@ class Play extends Phaser.Scene {
         this.endGoalGroup.setTint(this.globalColor.color);
         this.bouncepadGroup.setTint(this.globalColor.color); //Set tint of bouncepads
         this.playerGroup.setTint(this.globalColor.color); //Set tint of player
-        this.platformsGroup.setTint(this.globalColor.color); //Set tint of platforms
+        this.platformsGroup.setTint(this.globalColor.color); //Set tint of platforms.
+        this.crusherGroup.setTint(this.globalColor.color); //Set tint of platforms
     }
 
     resetSettings() {
