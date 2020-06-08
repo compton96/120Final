@@ -23,12 +23,10 @@ class Crusher extends Phaser.Physics.Arcade.Sprite {
         if(this.y >= this.spawnPoint + 375){
             this.goingDown = false;
             this.goingUp = true;
-            console.log('going up');
         }
         if(this.y <= this.spawnPoint){
             this.goingUp = false;
             this.goingDown = true;
-            console.log('going down');
         }
         if(this.goingDown && this.y < this.spawnPoint + 375){
             // console.log("Going Down");
