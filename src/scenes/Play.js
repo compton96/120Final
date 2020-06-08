@@ -51,11 +51,16 @@ class Play extends Phaser.Scene {
 
         //Define a render debug so we can see the Tilemap's collision bounds
         const debugGraphics = this.add.graphics().setAlpha(0.75);
-        // groundLayer.renderDebug(debugGraphics, {
-        //     tileColor: null, //Color of non-colliding tiles
-        //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
-        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
-        // });
+        this.groundLayer.renderDebug(debugGraphics, {
+            tileColor: null, //Color of non-colliding tiles
+            collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+        });
+        this.deathLayer.renderDebug(debugGraphics, {
+            tileColor: null, //Color of non-colliding tiles
+            collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+        });
         // this.jump = this.sound.add('jump', { volume: 0.3 });
         const p1Spawn = tilemap.findObject("Objects", obj => obj.name === "PlayerSpawn");
 
@@ -106,32 +111,26 @@ class Play extends Phaser.Scene {
         //Set world bounds to tilemap dimensions
         this.physics.world.bounds.setTo(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
-        //Create colliders
-        this.physics.add.collider(this.p1, this.bouncepadGroup, () => {
-            this.p1.setVelocityY(-2200);
-            // this.p1.isJumping = false;
-            // this.jump.stop();
-        });
 
         this.physics.add.collider(this.p1, this.groundLayer, () => { //When player touches the floor layer, allow them to jump again
             //this.p1.body.bounce.y = sat;
             // this.p1.isJumping = false;
             // this.jump.stop();
-            if (this.p1.facing === 'left') {
+            if (this.p1.facing === 'left' && ( this.p1.anims.getCurrentKey() =='jumpRight' || this.p1.anims.getCurrentKey() =='jumpLeft')) {
                 this.p1.setFrame('rockDudeRun15.png');
             }
-            else {
+            else if( this.p1.anims.getCurrentKey() =='jumpRight' || this.p1.anims.getCurrentKey() =='jumpLeft')
+            {
                 this.p1.setFrame('rockDudeRun1.png');
             }
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
             if (!this.p1.dead) {
-                console.log("poop");
                 this.p1.dead = true;
                 this.p1.anims.stop();
 
-                if (this.p1.facing == 'left')
+                if (this.p1.facing == 'left' || this.p1.facing === 'idleLeft')
                 {
                     this.p1.play('deathLeft');
 
@@ -145,12 +144,7 @@ class Play extends Phaser.Scene {
                     this.p1.x = this.p1.lastCheckpoint.x;
                     this.p1.y = this.p1.lastCheckpoint.y - 100;
                     this.p1.dead = false;
-                    if (this.p1.facing === 'left') {
-                        this.p1.setFrame('rockDudeRun15.png');
-                    }
-                    else {
-                        this.p1.setFrame('rockDudeRun1.png');
-                    }
+                    this.p1.setFrame('rockDudeRun1.png');
                 }, this);
             }
         });
@@ -163,7 +157,7 @@ class Play extends Phaser.Scene {
             if (!this.gameOver) {
                 this.gameOver = true;
                 this.p1.anims.stop();
-                if (this.p1.facing === 'left') {
+                if (this.p1.facing === 'left'  || this.p1.facing === 'idleLeft') {
                     this.p1.setFrame('rockDudeRun15.png');
                 }
                 else {
@@ -289,6 +283,15 @@ class Play extends Phaser.Scene {
         this.globalColor.s = sat;
         this.physics.world.timeScale = 1 + sat; //So player is slow on blue start
         this.updateColors();
+
+        this.physics.add.collider(this.p1, this.bouncepadGroup, () => {
+            if (this.globalColor == colorGREEN)
+            {
+                this.p1.setVelocityY(-3500*sat);
+            }
+            // this.p1.isJumping = false;
+            // this.jump.stop();
+        });
     }
 
     update(time, delta) {

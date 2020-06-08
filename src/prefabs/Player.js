@@ -3,7 +3,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture);
 
         this.MAX_X_VEL = 10000;
-        this.MAX_Y_VEL = 2500;
+        this.MAX_Y_VEL = 3500;
 
         scene.physics.add.existing(this);
         scene.add.existing(this); //add object to existing scene, displayList, updateList
@@ -15,7 +15,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.isJumping = false;
         this.lastCheckpoint;
         this.xMovement = 800;
-        this.yMovement = 1800;
+        this.yMovement = 1400;
         this.facing = 'right';
         this.jumpTimer = 0;
         this.time = 0;
@@ -49,21 +49,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     this.play('runRight',true);
             }
             else {
-                if (this.facing !== 'idle') {
+                if (this.facing !== 'idleLeft' && this.facing !== 'idleRight') {
                     this.anims.stop();
                     if (this.facing === 'left') {
                         this.setFrame('rockDudeRun15.png');
+                        this.facing = 'idleLeft';
                     }
                     else {
                         this.setFrame('rockDudeRun1.png');
+                        this.facing = 'idleRight';
                     }
-                    this.facing = 'idle';
                 }
             }
             if (standing && keySPACE.isDown && this.time > this.jumpTimer) {
                 this.setVelocityY(-this.yMovement);
                 this.jumpTimer = this.time + 750;
-                if(this.facing == 'left')
+                console.log(this.facing);
+                if(this.facing == 'left' || this.facing == 'idleLeft')
                 {
                     this.play('jumpLeft');
                 }

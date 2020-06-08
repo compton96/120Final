@@ -18,15 +18,15 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        if(this.x >= this.spawnPoint + 100){
+        if(this.x >= this.spawnPoint + 150){
             this.goingRight = false;
             this.goingLeft = true;
         }
-        if(this.x <= this.spawnPoint - 100){
+        if(this.x <= this.spawnPoint - 150){
             this.goingLeft = false;
             this.goingRight = true;
         }
-        if(this.goingRight && this.x < this.spawnPoint + 100){
+        if(this.goingRight && this.x < this.spawnPoint + 150){
             // console.log("Going right");
             if(this.color == colorGREEN){
                 // this.x += this.movementSpeed;
@@ -35,7 +35,7 @@ class Platform extends Phaser.Physics.Arcade.Sprite {
                 // this.x += this.movementSpeed * (1 - this.color.s);
                 this.setVelocityX(this.movementSpeed * (1 - this.color.s));
             }
-        } else if(this.goingLeft && this.x > this.spawnPoint - 100){
+        } else if(this.goingLeft && this.x > this.spawnPoint - 150){
             // console.log("Going left");
             if(this.color == colorGREEN){
                 // this.x -= this.movementSpeed;
