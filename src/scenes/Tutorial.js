@@ -132,7 +132,6 @@ class Tutorial extends Phaser.Scene {
                 else {
                     this.p1.play('deathRight');
                 }
-                console.log(this.p1);
                 this.p1.once('animationcomplete', () => {
                     // this.p1.once('death', () => {
                     this.p1.x = this.p1.lastCheckpoint.x;
@@ -362,11 +361,9 @@ class Tutorial extends Phaser.Scene {
                 this.scene.start("menuScene");
             }
         }
-        console.log(this.p1.body.x);
 
         if(this.p1.body.x >= 205 && !this.walk)
         {
-            console.log('poop');
             this.walk = true;
             this.dialogueOn = true;
             this.talk = this.add.text(this.cameras.main.midPoint.x + 400, this.cameras.main.midPoint.y-500, "Move left with A and right with D.", scoreConfig).setOrigin(0.5);
@@ -374,7 +371,6 @@ class Tutorial extends Phaser.Scene {
         }
         if(this.p1.body.x >= 450 && !this.jump)
         {
-            console.log('poop');
             this.jump = true;
             this.dialogueOn = true;
             this.talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Press Space to Jump! Try jumping on the jump pad in front of you.", scoreConfig).setOrigin(0.5);
@@ -382,7 +378,6 @@ class Tutorial extends Phaser.Scene {
         }
         if(this.p1.body.x >= 650 && !this.col)
         {
-            console.log('poop');
             this.col = true;
             this.dialogueOn = true;
             this.talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Change the colors of the world by using the arrow keys!", scoreConfig).setOrigin(0.5);
@@ -392,7 +387,6 @@ class Tutorial extends Phaser.Scene {
         }
         if(this.p1.body.x >= 1670 && !this.check)
         {
-            console.log('poop');
             this.check = true;
             this.dialogueOn = true;
             this.checkTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Once you reach a checkpoint flag you will respawn there when you die.", scoreConfig).setOrigin(0.5);
