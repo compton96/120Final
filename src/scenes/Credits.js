@@ -19,18 +19,17 @@ class Credits extends Phaser.Scene {
         }
 
         //Title
-        this.madeText = this.add.text(game.config.width / 2, game.config.height / 2 - 450, "Made by:", titleConfig).setOrigin(0.5);
+        this.madeText = this.add.text(game.config.width / 2, game.config.height / 2 - 350, "Made by:", titleConfig).setOrigin(0.5);
 
-        this.coleText = this.add.text(game.config.width / 2, game.config.height / 2 - 200, "Cole Cota", mainMenuConfig).setOrigin(0.5);
+        this.coleText = this.add.text(game.config.width / 2, game.config.height / 2 - 150, "Cole Cota", mainMenuConfig).setOrigin(0.5);
 
-        this.eugText = this.add.text(game.config.width / 2, game.config.height / 2 - 100, "Eugene Shin", mainMenuConfig).setOrigin(0.5);
+        this.eugText = this.add.text(game.config.width / 2, game.config.height / 2 - 50, "Eugene Shin", mainMenuConfig).setOrigin(0.5);
 
-        this.jakeText = this.add.text(game.config.width / 2, game.config.height / 2, "Jacob Compton", mainMenuConfig).setOrigin(0.5);
+        this.jakeText = this.add.text(game.config.width / 2, game.config.height / 2 + 50, "Jacob Compton", mainMenuConfig).setOrigin(0.5);
 
-        this.thanksText = this.add.text(game.config.width / 2, game.config.height / 2 + 300, "Thank you for playing our game.", mainMenuConfig).setOrigin(0.5);
+        this.thanksText = this.add.text(game.config.width / 2, game.config.height / 2 + 200, "Thank you for playing our game!", mainMenuConfig).setOrigin(0.5);
 
-        //Play Button
-        this.menuButton = this.add.text(game.config.width / 2, game.config.height / 2 + 500, "Back to Menu", mainMenuConfig).setOrigin(0.5);
+        this.menuButton = this.add.text(game.config.width / 2, game.config.height / 2 + 300, "Back to Menu", mainMenuConfig).setOrigin(0.5);
         this.menuButton.setInteractive({ useHandCursor: true });
         this.menuButton.on('pointerdown', () => this.enterButtonActiveState(this.menuButton));
         this.menuButton.on('pointerover', () => this.enterButtonHoverState(this.menuButton));

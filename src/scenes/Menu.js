@@ -33,7 +33,7 @@ class Menu extends Phaser.Scene {
         });
 
         //Tutorial Button
-        this.tutorialButton = this.add.text(game.config.width / 2, game.config.height / 2 + 200, "Tutorial", mainMenuConfig).setOrigin(0.5);
+        this.tutorialButton = this.add.text(game.config.width / 2, game.config.height / 2 + 100, "Tutorial", mainMenuConfig).setOrigin(0.5);
         this.tutorialButton.setInteractive({ useHandCursor: true });
         this.tutorialButton.on('pointerdown', () => this.enterButtonActiveState(this.tutorialButton));
         this.tutorialButton.on('pointerover', () => this.enterButtonHoverState(this.tutorialButton));
@@ -44,7 +44,7 @@ class Menu extends Phaser.Scene {
         });
 
         //Credit Button
-        this.creditButton = this.add.text(game.config.width / 2, game.config.height / 2 + 400, "Credits", mainMenuConfig).setOrigin(0.5);
+        this.creditButton = this.add.text(game.config.width / 2, game.config.height / 2 + 200, "Credits", mainMenuConfig).setOrigin(0.5);
         this.creditButton.setInteractive({ useHandCursor: true });
         this.creditButton.on('pointerdown', () => this.enterButtonActiveState(this.creditButton));
         this.creditButton.on('pointerover', () => this.enterButtonHoverState(this.creditButton));
