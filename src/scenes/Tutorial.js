@@ -24,6 +24,12 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
+        this.dialogueOn = false;
+        this.walk = false;
+        this.jump = false;
+        this.col = false;
+        this.check = false;
+        this.goal = false;
 
         physicsList = new Phaser.Structs.List(Phaser.GameObjects.Group);
 
@@ -53,7 +59,6 @@ class Tutorial extends Phaser.Scene {
         //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
         //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
         // });
-        this.jump = this.sound.add('jump', { volume: 0.3 });
         const p1Spawn = tilemap.findObject("Objects", obj => obj.name === "PlayerSpawn");
 
         //spawn player
@@ -103,36 +108,38 @@ class Tutorial extends Phaser.Scene {
         //Set world bounds to tilemap dimensions
         this.physics.world.bounds.setTo(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
-        //Create colliders
-        this.physics.add.collider(this.p1, this.bouncepadGroup, () => {
-            this.p1.setVelocityY(-2200);
-            // this.p1.isJumping = false;
-            // this.jump.stop();
-        });
+        //Create colliders;
 
         this.physics.add.collider(this.p1, this.backgroundLayer, () => { //When player touches the floor layer, allow them to jump again
-            //this.p1.body.bounce.y = sat;
-            // this.p1.isJumping = false;
-            // this.jump.stop();
+            if (this.p1.facing === 'left' && ( this.p1.anims.getCurrentKey() =='jumpRight' || this.p1.anims.getCurrentKey() =='jumpLeft')) {
+                this.p1.setFrame('rockDudeRun15.png');
+            }
+            else if( this.p1.anims.getCurrentKey() =='jumpRight' || this.p1.anims.getCurrentKey() =='jumpLeft')
+            {
+                this.p1.setFrame('rockDudeRun1.png');
+            }
         });
 
         this.physics.add.collider(this.p1, this.deathLayer, () => { //When player touches deadly objects, respawn at last checkpoint
             if (!this.p1.dead) {
                 this.p1.dead = true;
                 this.p1.anims.stop();
-                this.p1.play('death');
+                if (this.p1.facing == 'left' || this.p1.facing === 'idleLeft')
+                {
+                    this.p1.play('deathLeft');
+
+                }
+                else {
+                    this.p1.play('deathRight');
+                }
                 console.log(this.p1);
                 this.p1.once('animationcomplete', () => {
                     // this.p1.once('death', () => {
                     this.p1.x = this.p1.lastCheckpoint.x;
                     this.p1.y = this.p1.lastCheckpoint.y - 100;
                     this.p1.dead = false;
-                    if (this.p1.facing === 'left') {
-                        this.p1.setFrame('rockDudeRun15.png');
-                    }
-                    else {
-                        this.p1.setFrame('rockDudeRun1.png');
-                    }
+
+                    this.p1.setFrame('rockDudeRun1.png');
                 }, this);
             }
         });
@@ -145,7 +152,7 @@ class Tutorial extends Phaser.Scene {
             if (!this.gameOver) {
                 this.gameOver = true;
                 this.p1.anims.stop();
-                if (this.p1.facing === 'left') {
+                if (this.p1.facing === 'left'  || this.p1.facing === 'idleLeft') {
                     this.p1.setFrame('rockDudeRun15.png');
                 }
                 else {
@@ -193,19 +200,8 @@ class Tutorial extends Phaser.Scene {
         keyTHREE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
 
         scoreConfig.fixedWidth = 0;
-        //this.clockDisplay = this.add.text(game.config.width / 2, 42, "Time: " + this.game.settings.gameTimer, scoreConfig);
-        //this.highestScore = this.add.text(game.config.width / 2, 42 + 64, "Current Highscore: " + localStorage.getItem("highScore"), scoreConfig).setOrigin(0.5);
-        //game over flag
         this.gameOver = false;
 
-        //play clock
-        // scoreConfig.fixedWidth = 0;
-        // this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-        //     this.add.text(game.config.width / 2, game.config.height / 2, "GAME OVER", scoreConfig).setOrigin(0.5);
-        //     this.add.text(game.config.width / 2, game.config.height / 2 + 64, "Space to Restart or ← for Menu", scoreConfig).setOrigin(0.5);
-        //     this.gameOver = true;
-        // }, null, this);
-        //console.log(physicsList);
 
         this.anims.create({
             key: 'runRight',
@@ -283,9 +279,22 @@ class Tutorial extends Phaser.Scene {
         this.globalColor = colorBLUE;
         this.globalColor.s = sat;
         this.updateColors();
+
+        this.physics.add.collider(this.p1, this.bouncepadGroup, () => {
+            if (this.globalColor == colorGREEN)
+            {
+                this.p1.setVelocityY(-3500*sat);
+            }
+            // this.p1.isJumping = false;
+            // this.jump.stop();
+        });
     }
 
     update(time, delta) {
+        this.platformsGroup.children.each(function (child) {
+            child.color = this.globalColor;
+            child.update();
+        }, this);
 
         this.p1.updateTime(this.time.now);
         //keep saturation state between worlds
@@ -333,12 +342,7 @@ class Tutorial extends Phaser.Scene {
 
         //check key input for restart
         if (this.gameOver) {
-            //Check if they beat high score
-            // if (parseInt(this.clockDisplay.text) > highScore) {
-            //     highScore = this.clockDisplay.text;
-            //     console.log("New Highscore: " + highScore);
-            //     localStorage.setItem("highScore", highScore);
-            // }
+
             if (!this.addedGameOverText) {
                 this.addedGameOverText = true;
                 this.gameOverText = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "You finished the tutorial!", scoreConfig).setOrigin(0.5);
@@ -358,51 +362,43 @@ class Tutorial extends Phaser.Scene {
                 this.scene.start("menuScene");
             }
         }
-        this.dialogueOn = false;
-        this.walk = false;
-        this.jump = false;
-        this.col = false;
-        this.check = false;
-        this.goal = false;
+        console.log(this.p1.body.x);
 
-        if(this.p1.body.x == 150 && !this.walk)
+        if(this.p1.body.x >= 205 && !this.walk)
         {
+            console.log('poop');
             this.walk = true;
             this.dialogueOn = true;
-            this.walkTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Move left with A and right with D.", scoreConfig).setOrigin(0.5);
-            let done = this.time.delayedCall(300, () => { this.dialogueOn = false; this.walkTalk.destroy();}, null, this)
+            this.talk = this.add.text(this.cameras.main.midPoint.x + 400, this.cameras.main.midPoint.y-500, "Move left with A and right with D.", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.talk.destroy();}, null, this)
         }
-        if(this.p1.body.x == 500 && !this.jump)
+        if(this.p1.body.x >= 450 && !this.jump)
         {
+            console.log('poop');
             this.jump = true;
             this.dialogueOn = true;
-            this.jumpTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Press Space to Jump! Try jumping on the jump pad in front of you.", scoreConfig).setOrigin(0.5);
-            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.jumpTalk.destroy(); }, null, this)
+            this.talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Press Space to Jump! Try jumping on the jump pad in front of you.", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.talk.destroy(); }, null, this)
         }
-        if(this.p1.body.x == 900 && !this.col)
+        if(this.p1.body.x >= 650 && !this.col)
         {
+            console.log('poop');
             this.col = true;
             this.dialogueOn = true;
-            this.colTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Change the colors of the world by using the arrow keys!", scoreConfig).setOrigin(0.5);
-            this.col2Talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 450, "Green is a bouncy world while Blue slows the world down.", scoreConfig).setOrigin(0.5);
-            this.col3Talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 400, "Experiment with changing the saturation with the up and down arrows keys to affect the world!", scoreConfig).setOrigin(0.5);
-            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.colTalk.destroy(); this.col2Talk.destroy(); this.col3Talk.destroy();}, null, this)
+            this.talk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Change the colors of the world by using the arrow keys!", scoreConfig).setOrigin(0.5);
+            this.talk2 = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 400, "Green is a bouncy world while Blue slows the world down.", scoreConfig).setOrigin(0.5);
+            this.talk3 = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 300, "Experiment with changing the saturation with the up and down arrows keys to affect the world!", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(7000, () => { this.dialogueOn = false; this.talk.destroy(); this.talk2.destroy(); this.talk3.destroy();}, null, this)
         }
-        if(this.p1.body.x == 1200 && !this.check)
+        if(this.p1.body.x >= 1670 && !this.check)
         {
+            console.log('poop');
             this.check = true;
             this.dialogueOn = true;
-            this.checkTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Once you reach a checkpoitn flag you will respawn there when you die.", scoreConfig).setOrigin(0.5);
-            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.checkTalk.destroy();}, null, this)
+            this.checkTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Once you reach a checkpoint flag you will respawn there when you die.", scoreConfig).setOrigin(0.5);
+            this.checkTalk2 = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 400, "Reach the end flag to win the level!", scoreConfig).setOrigin(0.5);
+            let done = this.time.delayedCall(5000, () => { this.dialogueOn = false; this.checkTalk.destroy(); this.checkTalk2.destroy();}, null, this)
         }
-        if(this.p1.body.x == 250 && !this.goal)
-        {
-            this.goal = true;
-            this.dialogueOn = true;
-            this.goalTalk = this.add.text(this.cameras.main.midPoint.x, this.cameras.main.midPoint.y - 500, "Reach the goal to win the level!", scoreConfig).setOrigin(0.5);
-            let done = this.time.delayedCall(3000, () => { this.dialogueOn = false; this.goalTalk.destroy();}, null, this)
-        }
-
         if (!this.gameOver && !this.dialogueOn) {
 
             //Input from WASD
@@ -440,22 +436,8 @@ class Tutorial extends Phaser.Scene {
                 }
             }
 
-            //update sprites here if you want them to pause on game over
             this.p1.update();
-            this.platformsGroup.children.each(function (child) {
-                child.color = this.globalColor;
-                child.update();
-            }, this);
 
-            // if (parseInt(this.clockDisplay.text) > highScore) {
-            //     highScore = this.clockDisplay.text;
-            //     console.log("New Highscore: " + highScore);
-            //     localStorage.setItem("highScore", highScore);
-            //     this.highestScore.setText("Current Highscore: " + localStorage.getItem("highScore"));
-            // }
-
-            //Update timer text
-            //this.clockDisplay.setText(Math.floor(this.clock.getElapsedSeconds()));
         }
     }
 
