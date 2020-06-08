@@ -1,6 +1,6 @@
-class Menu extends Phaser.Scene {
+class Credits extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("creditScene");
 
     }
 
@@ -19,39 +19,25 @@ class Menu extends Phaser.Scene {
         }
 
         //Title
-        this.titleText = this.add.text(game.config.width / 2, game.config.height / 2 - 250, "The Stone Golem", titleConfig).setOrigin(0.5);
+        this.madeText = this.add.text(game.config.width / 2, game.config.height / 2 - 450, "Made by:", titleConfig).setOrigin(0.5);
+
+        this.coleText = this.add.text(game.config.width / 2, game.config.height / 2 - 200, "Cole Cota", mainMenuConfig).setOrigin(0.5);
+
+        this.eugText = this.add.text(game.config.width / 2, game.config.height / 2 - 100, "Eugene Shin", mainMenuConfig).setOrigin(0.5);
+
+        this.jakeText = this.add.text(game.config.width / 2, game.config.height / 2, "Jacob Compton", mainMenuConfig).setOrigin(0.5);
+
+        this.thanksText = this.add.text(game.config.width / 2, game.config.height / 2 + 300, "Thank you for playing our game.", mainMenuConfig).setOrigin(0.5);
 
         //Play Button
-        this.playButton = this.add.text(game.config.width / 2, game.config.height / 2, "Start Game", mainMenuConfig).setOrigin(0.5);
-        this.playButton.setInteractive({ useHandCursor: true });
-        this.playButton.on('pointerdown', () => this.enterButtonActiveState(this.playButton));
-        this.playButton.on('pointerover', () => this.enterButtonHoverState(this.playButton));
-        this.playButton.on('pointerout', () => this.enterButtonRestState(this.playButton));
-        this.playButton.on('pointerup', () => {
-            this.enterButtonHoverState(this.playButton)
-            this.scene.start("playScene");
-        });
-
-        //Tutorial Button
-        this.tutorialButton = this.add.text(game.config.width / 2, game.config.height / 2 + 200, "Tutorial", mainMenuConfig).setOrigin(0.5);
-        this.tutorialButton.setInteractive({ useHandCursor: true });
-        this.tutorialButton.on('pointerdown', () => this.enterButtonActiveState(this.tutorialButton));
-        this.tutorialButton.on('pointerover', () => this.enterButtonHoverState(this.tutorialButton));
-        this.tutorialButton.on('pointerout', () => this.enterButtonRestState(this.tutorialButton));
-        this.tutorialButton.on('pointerup', () => {
-            this.enterButtonHoverState(this.tutorialButton)
-            this.scene.start("tutorialScene");
-        });
-
-        //Credit Button
-        this.creditButton = this.add.text(game.config.width / 2, game.config.height / 2 + 400, "Credits", mainMenuConfig).setOrigin(0.5);
-        this.creditButton.setInteractive({ useHandCursor: true });
-        this.creditButton.on('pointerdown', () => this.enterButtonActiveState(this.creditButton));
-        this.creditButton.on('pointerover', () => this.enterButtonHoverState(this.creditButton));
-        this.creditButton.on('pointerout', () => this.enterButtonRestState(this.creditButton));
-        this.creditButton.on('pointerup', () => {
-            this.enterButtonHoverState(this.creditButton)
-            this.scene.start("creditScene");
+        this.menuButton = this.add.text(game.config.width / 2, game.config.height / 2 + 500, "Back to Menu", mainMenuConfig).setOrigin(0.5);
+        this.menuButton.setInteractive({ useHandCursor: true });
+        this.menuButton.on('pointerdown', () => this.enterButtonActiveState(this.menuButton));
+        this.menuButton.on('pointerover', () => this.enterButtonHoverState(this.menuButton));
+        this.menuButton.on('pointerout', () => this.enterButtonRestState(this.menuButton));
+        this.menuButton.on('pointerup', () => {
+            this.enterButtonHoverState(this.menuButton)
+            this.scene.start("menuScene");
         });
 
         this.goingToGreen = false;

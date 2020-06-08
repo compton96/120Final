@@ -49,18 +49,18 @@ class Play extends Phaser.Scene {
         this.groundLayer.setCollisionByProperty({ hasCollision: true });
         this.deathLayer.setCollisionByProperty({ hasCollision: true });
 
-        //Define a render debug so we can see the Tilemap's collision bounds
-        const debugGraphics = this.add.graphics().setAlpha(0.75);
-        this.groundLayer.renderDebug(debugGraphics, {
-            tileColor: null, //Color of non-colliding tiles
-            collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255)
-        });
-        this.deathLayer.renderDebug(debugGraphics, {
-            tileColor: null, //Color of non-colliding tiles
-            collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255)
-        });
+        // //Define a render debug so we can see the Tilemap's collision bounds
+        // const debugGraphics = this.add.graphics().setAlpha(0.75);
+        // this.groundLayer.renderDebug(debugGraphics, {
+        //     tileColor: null, //Color of non-colliding tiles
+        //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+        // });
+        // this.deathLayer.renderDebug(debugGraphics, {
+        //     tileColor: null, //Color of non-colliding tiles
+        //     collidingLineColor: new Phaser.Display.Color(243, 134, 48, 255),
+        //     faceColor: new Phaser.Display.Color(40, 39, 37, 255)
+        // });
 
         this.crusherSpawns = tilemap.filterObjects("Objects", (object) => {
             if (object.name == "Crusher") {
@@ -95,6 +95,10 @@ class Play extends Phaser.Scene {
         }, this);
         this.checkpointGroup = this.add.group(this.checkpoints);
         this.physics.world.enable(this.checkpoints, Phaser.Physics.Arcade.STATIC_BODY);
+        this.checkpointGroup.children.each(function (child) {
+            child.body.setSize(95, 200);
+            child.body.setOffset(-10, -25);
+        }, this);
 
         //Setting up endGoal
         this.endGoals = tilemap.createFromObjects("Objects", "EndGoal", {
@@ -157,6 +161,7 @@ class Play extends Phaser.Scene {
                     // this.p1.once('death', () => {
                     this.p1.x = this.p1.lastCheckpoint.x;
                     this.p1.y = this.p1.lastCheckpoint.y - 100;
+                    this.p1.body.setVelocity(0 , 0);
                     this.p1.dead = false;
                     this.p1.setFrame('rockDudeRun1.png');
                 }, this);
@@ -186,7 +191,10 @@ class Play extends Phaser.Scene {
         });
 
         this.physics.add.overlap(this.p1, this.checkpointGroup, (player, checkpoint) => { //When player touches checkpoint, store it
-            this.p1.lastCheckpoint = checkpoint;
+            if (!this.p1.dead)
+            {
+                this.p1.lastCheckpoint = checkpoint;
+            }
         });
 
         this.physics.add.overlap(this.p1, this.endGoalGroup, () => { //When player touches endGoal, set gameOver to true

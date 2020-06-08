@@ -45,6 +45,7 @@ class Tutorial extends Phaser.Scene {
         //Add a tile set to the tilemap
         const tileset = tilemap.addTilesetImage("tilemap", "tilemapImage");
         //Create static layers
+        this.sceneryLayer = tilemap.createDynamicLayer("Scenery", tileset, 0, 0);
         this.backgroundLayer = tilemap.createDynamicLayer("Background", tileset, 0, 0);
         this.deathLayer = tilemap.createDynamicLayer("Death", tileset, 0, 0);
 
@@ -136,6 +137,7 @@ class Tutorial extends Phaser.Scene {
                     // this.p1.once('death', () => {
                     this.p1.x = this.p1.lastCheckpoint.x;
                     this.p1.y = this.p1.lastCheckpoint.y - 100;
+                    this.p1.body.setVelocity(0 , 0);
                     this.p1.dead = false;
 
                     this.p1.setFrame('rockDudeRun1.png');
@@ -440,6 +442,9 @@ class Tutorial extends Phaser.Scene {
             tile.tint = this.globalColor.color;
         });
         this.deathLayer.forEachTile(tile => { //Loop through death layer and set each tile color depending on its property
+            tile.tint = this.globalColor.color;
+        });
+        this.sceneryLayer.forEachTile(tile => { //Loop through scenery layer and set each tile color depending on its property
             tile.tint = this.globalColor.color;
         });
         this.checkpointGroup.setTint(this.globalColor.color); //Set tint of checkpoints

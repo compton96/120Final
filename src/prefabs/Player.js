@@ -64,7 +64,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (standing && keySPACE.isDown && this.time > this.jumpTimer) {
                 this.setVelocityY(-this.yMovement);
                 this.jumpTimer = this.time + 750;
-                console.log(this.facing);
                 if(this.facing == 'left' || this.facing == 'idleLeft')
                 {
                     this.play('jumpLeft');

@@ -14,13 +14,13 @@ let config =
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            // debug: true,
             fps: 100, //This fixed falling through the floor
             tileBias: 64,
             overlapBias: 17,
         },
     },
-    scene: [Menu, Tutorial, Play],
+    scene: [Menu, Tutorial, Credits, Play],
 };
 
 let game = new Phaser.Game(config);
